@@ -1,46 +1,28 @@
 <template>
-  <list />
-  <div class="item" :class="{ paid : member.paid }" v-for="member in members" :key="member.email">
-    <div class="fullname">{{ member.fname }} {{ member.sname }}</div> 
-    <div class="phone">{{member.phone}}</div>
-    <div class="email">{{member.email}}</div>
-    <button @click="showMore(member.email)">O</button>
-    <div :id="member.email" class="showMore hidden">
-      <div class="moreInfo">
-        <section>
-          <h6>kurssit</h6>
-          <ul>
-            <li v-for="course in member.courses" :key="course">{{ course }}</li>
-          </ul>
-        </section>
-        <section>
-          <h6>markkinointi</h6>
-          <ul>
-            <li><span v-if="member.marketing[0].party">X</span> tanssibileet</li>
-            <li><span v-if="member.marketing[0].course">X</span> tiiviskurssit</li>
-          </ul>
-        </section>
-    </div>
-    </div>
-  </div>
+  <nav>
+    <a href="" @click.prevent="foo">Kaikki jäsenet</a>
+    <a href="" @click.prevent>Maksujen tarkastus</a>
+    <a href="" @click.prevent>Läsnäololistat</a>
+  </nav>
+  <AllMembers v-bind:members="members" />
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
-import List from './components/List.vue'
+import AllMembers from './components/AllMembers.vue'
 
 export default {
   name: 'App',
   components: {
-    List
+    AllMembers
   },
   data() {
     return {
       members: [
-        { fname: 'Greatman', sname: 'Lim', email: 'fname.sname@mahti.com', phone: '044 5200985', paid: true, courses: ['jatko'], marketing: [{ party: true, course: true }]},
-        { fname: 'Tom', sname: 'Hanks', email: 'tom.hanks@mahti.org', phone: '044 0000000', paid: false, courses: ['alkeetOma'], marketing: [{ party: false, course: true }]},
-        { fname: 'Leonardo', sname: 'DiCaprio', email: 'leo.dicaprio@mahti.org', phone: '044 0000001', paid: true, courses: ['alkeisjatko', 'alkeet'], marketing: [{ party: true, course: true }] },
-        { fname: 'Will', sname: 'Smith', email: 'will.smith@mahti.org', phone: '044 0000002', paid: true, courses: ['alkeet'], marketing: [{ party: true, course: true }]}
+        { fname: 'Greatman', lname: 'Lim', email: 'fname.lname@mahti.com', phone: '044 5200985', paid: true, courses: [{ courseId: 'jatko', role: 'viejä' }], membership: [{ student: false, club: false, hyy: '' }] },
+        { fname: 'Tom', lname: 'Hanks', email: 'tom.hanks@mahti.org', phone: '044 0000000', paid: false, courses: [{ courseId: 'alkeetOma', role: 'viejä' }], membership: [{ student: true, club: true, hyy: '001' }] },
+        { fname: 'Leonardo', lname: 'DiCaprio', email: 'leo.dicaprio@mahti.org', phone: '044 0000001', paid: true, courses: [{ courseId: 'alkeet', role: 'viejä' }, { courseId: 'alkeisjatko', role: 'seuraaja' }], membership: [{ student: true, club: false, hyy: '002' }] },
+        { fname: 'Will', lname: 'Smith', email: 'will.smith@mahti.org', phone: '044 0000002', paid: true, courses: [{courseId: 'alkeet', role: 'viejä'}], membership: [{ student: true, club: false, hyy: '003' }] },
+        { fname: 'Denzel', lname: 'Washington', email: 'denzel.washington@mahti.org', phone: '044 0000003', paid: true, courses: [{courseId: 'jatko', role: 'viejä'}], membership: [{ student: true, club: true, hyy: '004' }] }
       ]
     }
   },
@@ -48,7 +30,15 @@ export default {
     showMore: function(memberId) {
       const member = document.getElementById(memberId)
       member.classList.toggle('hidden')
+    },
+    removeMember: function(memberObj) {
+      this.members = this.members.filter((obj) => { return obj !== memberObj })
+    },
+    foo: function() {
+      console.log('foo')
     }
+  },
+  mounted: function() {
   }
 }
 </script>
@@ -63,12 +53,37 @@ export default {
   margin-top: 60px;
 }
 
+nav {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1em;
+  a {
+    background: lightblue;
+    border: solid 2px white;
+    border-radius: 5px;
+    padding: 1em;
+    &:visited {
+      color: black;
+      text-decoration: none;
+    }
+    &:active {
+      color: white;
+    }
+    &:link {
+      text-decoration: none;
+      color: white;
+    }
+  }
+}
+
 .item {
   display: grid;
-  grid-template-columns: 170px 140px 170px auto;
+  grid-template-columns: 170px 140px 170px auto 85px 85px;
   grid-template-rows: repeat(2, auto);
-  background: red;
-  margin: .2em;
+  background: lightgray;
+  max-width: 850px;
+  margin: .2em auto;
+  padding: .3em;
   border-radius: 3px;
   div {
     padding: .2em;
@@ -86,10 +101,11 @@ export default {
     text-align: left;
   }
   button {
-    margin-left: auto;
-    margin-right: 1em;
     border: none;
-    background: none;
+    width: 80px;
+    border: solid 1px white;
+    outline: none;
+    margin-right: 100px;
   }
   .moreInfo {
     display: flex;
@@ -108,13 +124,21 @@ export default {
   }
 }
 
+/* utilities */
 .paid {
-  background: gray,
+  background: lightgray,
 }
 
-/* utilities */
+.unpaid {
+  background: red,
+}
+
 .hidden {
   display: none;
+}
+
+.warning {
+  background: pink;
 }
 
 </style>
