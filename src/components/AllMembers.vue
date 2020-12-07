@@ -1,11 +1,22 @@
 <template>
+  <nav class="secondary">
+    <a href="" @click.prevent="$emit('togglemodal', 'mails')">Sähköpostit</a>
+  </nav>
+  <div id="mails" class="hidden modal">
+    <button @click="$emit('togglemodal', 'mails')">sulje</button>
+    <button @click="copyToClipboard">kopioi leikepöytään</button>
+    <span id="copyMessage" class="hidden sm">ok</span>
+    <div id="mail-list" class="mail-list">
+      <p>Sähköpostia lähettäessäsi sähköpostien osoitteet tulee kirjoittaa BCC-kenttään ja TO-kenttään oma osoitteesi, eli osoite mistä sähköpostia lähetetään. Painamalla nappulaa "kopioi leikepöytään" voit helposti kopioida kaikki osoitteet.</p>
+      <textarea id="copyToClipboard" :value="allmails" readonly></textarea>
+    </div>
+  </div>
   <div class="item" v-for="member in members" :key="member.email">
     <div class="fullname">{{ member.lname }}, {{ member.fname }} </div> 
     <div class="phone">{{member.phone}}</div>
     <div class="email">{{member.email}}</div>
     <div class="margin"></div>
     <button @click="showMore(member.email)">näytä lisää</button>
-    <!-- <button class="warning" @click="removeMember(member)">poista</button> -->
     <button class="warning" @click="$emit('removemember', member)">poista</button>
     <div :id="member.email" class="showMore hidden">
       <div class="moreInfo">
@@ -38,6 +49,7 @@ export default {
   name: 'AllMembers',
   data() {
     return {
+      allmails: ''
     }
   },
   props: ['members'],
@@ -46,11 +58,26 @@ export default {
       const member = document.getElementById(memberId)
       member.classList.toggle('hidden')
     },
-    removeMember: function(memberObj) {
-      // this.members = this.members.filter((obj) => { return obj !== memberObj })
-      console.log(memberObj)
+    copyToClipboard: function() {
+      const textToCopy = document.getElementById('copyToClipboard')
+      textToCopy.select()
+      document.execCommand('copy')
+      if (window.getSelection) {window.getSelection().removeAllRanges();}
+      else if (document.selection) {document.selection.empty();}
+      document.getElementById('copyMessage').classList.remove('hidden')
+    },
+    populateMails: function() {
+      this.allmails = ''
+      const allMailsArray = []
+      this.members.forEach(member => {
+        allMailsArray.push(member.email)
+      })
+      this.allmails = allMailsArray.toString()
     }
   },
+  mounted: function() {
+    this.populateMails();
+  }
 }
 
 </script>

@@ -1,12 +1,21 @@
 <template>
-  <nav>
+  <nav class="primary">
     <a href="" @click.prevent="display('AllMembers')">Kaikki jäsenet</a>
     <a href="" @click.prevent="display('PaymentCheck')">Maksujen tarkastus</a>
     <a href="" @click.prevent="display('AttendanceList')">Läsnäololistat</a>
   </nav>
-  <AllMembers v-bind:members="members" @removemember="removeMember" v-if="displays.AllMembers" />
-  <PaymentCheck v-bind:members="members" v-if="displays.PaymentCheck"/>
-  <AttendanceList v-bind:members="members" v-if="displays.AttendanceList"/>
+  <AllMembers 
+    v-bind:members="members" 
+    @removemember="removeMember" 
+    @togglemodal="toggleModal"
+    v-if="displays.AllMembers" />
+  <PaymentCheck
+    v-bind:members="members" 
+    @togglemodal="toggleModal" 
+    v-if="displays.PaymentCheck"/>
+  <AttendanceList 
+    v-bind:members="members"
+    v-if="displays.AttendanceList"/>
 </template>
 
 <script>
@@ -16,9 +25,7 @@ import AttendanceList from './components/AttendanceList.vue'
 
 export default {
   name: 'App',
-  components: {
-    AllMembers, PaymentCheck, AttendanceList
-  },
+  components: { AllMembers, PaymentCheck, AttendanceList },
   data() {
     return {
       members: [
@@ -38,6 +45,9 @@ export default {
     display: function(target) {
         Object.keys(this.displays).forEach(k => this.displays[k] = false);
         this.displays[target] = true
+    },
+    toggleModal: function(modal){
+      document.getElementById(modal).classList.toggle('hidden')
     }
   },
   mounted: function() {
@@ -76,6 +86,50 @@ nav {
       text-decoration: none;
       color: white;
     }
+  }
+  &.secondary {
+    a {
+      background: lightgray;
+      padding: .5em;
+    }
+  }
+}
+
+.modal {
+  position: absolute;
+  width: 700px;
+  background: lightgray;
+  border-radius: 5px;
+  border: solid 2px gray;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: .5em;
+  text-align: left;
+  .mail-list {
+    padding: 1.5em;
+  }
+  button {
+    border: none;
+    border: solid 1px white;
+    outline: none;
+    margin-right: .4em;
+    background: white;
+  }
+  .sm {
+    font-size: .8em;
+  }
+  textarea {
+    width: 100%;
+    border: none;
+    resize: none;
+    background: lightgray;
+    color: #2c3e50;
+    outline: none;
+    padding: 0;
+    font-size: .9em;
+  }
+  p {
+    margin-top: 0;
   }
 }
 
