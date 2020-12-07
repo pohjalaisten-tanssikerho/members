@@ -22,18 +22,18 @@ export default {
   data() {
     return {
       members: [
-        { fname: 'Greatman', lname: 'Lim', email: 'fname.lname@mahti.com', phone: '044 5200985', paid: true, courses: [{ courseId: 'jatko', role: 'viejä' }, { support: false }], membership: [{ student: false, club: false, hyy: '' }] },
-        { fname: 'Tom', lname: 'Hanks', email: 'tom.hanks@mahti.org', phone: '044 0000000', paid: false, courses: [{ courseId: 'alkeetOma', role: 'viejä' }, { support: true }], membership: [{ student: true, club: true, hyy: '001' }] },
-        { fname: 'Leonardo', lname: 'DiCaprio', email: 'leo.dicaprio@mahti.org', phone: '044 0000001', paid: true, courses: [{ courseId: 'alkeet', role: 'viejä' }, { courseId: 'alkeisjatko', role: 'seuraaja' }, { support: true }], membership: [{ student: true, club: false, hyy: '002' }] },
-        { fname: 'Will', lname: 'Smith', email: 'will.smith@mahti.org', phone: '044 0000002', paid: true, courses: [{courseId: 'alkeet', role: 'viejä' }, { support: false }], membership: [{ student: true, club: false, hyy: '003' }] },
-        { fname: 'Denzel', lname: 'Washington', email: 'denzel.washington@mahti.org', phone: '044 0000003', paid: true, courses: [{courseId: 'jatko', role: 'viejä'}, { support: false }], membership: [{ student: true, club: true, hyy: '004' }] }
+        { fname: 'Greatman', lname: 'Lim', email: 'fname.lname@mahti.com', phone: '044 5200985', courses: [{ courseId: 'jatko', role: 'viejä', paid: true }], membership: [{ student: false, club: false, hyy: '' }] },
+        { fname: 'Tom', lname: 'Hanks', email: 'tom.hanks@mahti.org', phone: '044 0000000', courses: [{ courseId: 'alkeetOma', role: 'viejä', paid: false }, { courseId: 'kannatus', amount: '20', paid: true }], membership: [{ student: true, club: true, hyy: '001' }] },
+        { fname: 'Leonardo', lname: 'DiCaprio', email: 'leo.dicaprio@mahti.org', phone: '044 0000001', courses: [{ courseId: 'alkeet', role: 'viejä', paid: true }, { courseId: 'alkeisjatko', role: 'seuraaja', paid: false }, { courseId: 'kannatus', amount: '10', paid: false }], membership: [{ student: true, club: false, hyy: '002' }] },
+        { fname: 'Will', lname: 'Smith', email: 'will.smith@mahti.org', phone: '044 0000002', courses: [{courseId: 'alkeet', role: 'viejä', paid: true }], membership: [{ student: true, club: false, hyy: '003' }] },
+        { fname: 'Denzel', lname: 'Washington', email: 'denzel.washington@mahti.org', phone: '044 0000003', courses: [{courseId: 'jatko', role: 'viejä', paid: true}], membership: [{ student: true, club: true, hyy: '004' }] }
       ],
       displays: { AllMembers: true, PaymentCheck: false, AttendanceList: false }
     }
   },
   methods: {
     removeMember: function(memberObj) {
-      this.members = this.members.filter((obj) => { return obj !== memberObj })
+      this.members = this.members.filter(obj => { return obj !== memberObj })
     },
     display: function(target) {
         Object.keys(this.displays).forEach(k => this.displays[k] = false);

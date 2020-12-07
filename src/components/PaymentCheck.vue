@@ -1,11 +1,24 @@
 <template>
-  <div class="item" :class="{ unpaid : !member.paid }" v-for="member in members" :key="member.email">
+  <div class="item" v-for="member in members" :key="member.email">
+
     <div class="fullname">{{ member.lname }}, {{ member.fname }} </div> 
-    <div class="price">{{ price(member.membership[0]) }}</div>
-    <div class="reference">{{ reference(member.membership[0]) }}</div>
+    <!-- <div class="price">{{ price(member.membership[0]) }}</div> -->
+    <!-- <div class="reference">{{ reference(member.membership[0]) }}</div> -->
     <div class="discount">{{ discounts(member.membership[0]) }}</div>
-    <button @click="togglePaid(member)" v-if="member.paid">poista maksu</button>
-    <button @click="togglePaid(member)" v-else>merkitse maksu</button>
+      <div class="course" :class="{ marginBottom : index, unpaid : !course.paid }" v-for="(course, index) in member.courses" :key="index">
+        <button @click="togglePaid(course)" v-if="course.paid">poista maksu</button>
+        <button @click="togglePaid(course)" v-else>merkitse maksu</button>
+        <div class="left-padding">{{ price(member.membership[0]) }}</div>
+        <div class="left-padding">viite</div>
+
+        <div class="" v-if="course.courseId == 'alkeetOma'">alkeet omalla parilla</div>
+        <div class="" v-if="course.courseId == 'alkeet'">alkeet</div>
+        <div class="" v-if="course.courseId == 'alkeisjatko'">jatko</div>
+        <div class="" v-if="course.courseId == 'jatko'">jatko</div>
+        <div class="" v-if="course.courseId == 'kannatus'">kannatusjäsen</div>
+
+      </div>
+
   </div>
 </template>
 
@@ -31,9 +44,9 @@ export default {
       console.log(membership)
       return '0033'
     },
-    togglePaid: function(member) { 
-      console.log(member)
-      member.paid = member.paid ? false : true
+    togglePaid: function(course) { 
+      console.log(course)
+      course.paid = course.paid ? false : true
     }
   },
   mounted: function() {
@@ -44,56 +57,48 @@ export default {
 
 <style lang="scss" scoped>
 
-$button-width: 150px;
+$button-width: 120px;
 
 .item {
   display: grid;
-  /* grid-template-columns: 180px auto 170px auto 85px 85px; */
-  grid-template-columns: 180px 40px 40px auto $button-width;
-  grid-template-rows: repeat(2, auto);
+  grid-template-columns: 180px auto;
+  grid-template-rows: auto;
   background: lightgray;
-  max-width: 850px;
+  max-width: 400px;
   margin: .2em auto;
   padding: .3em;
   border-radius: 3px;
   background-color: lightgray;
+  .discount {
+    text-align: right;
+  }
   div {
     padding: .2em;
     text-align: left;
   }
-  .showMore {
-    grid-column-start: 1;
-    grid-column-end: span 4;
-    text-align: left;
-  }
-  .fullname {
-    text-align: left;
-  }
-  .phone {
-    text-align: left;
-  }
-  button {
-    border: none;
-    width: $button-width;
-    border: solid 1px white;
-    outline: none;
-    margin-right: 100px;
-  }
-  .moreInfo {
-    display: flex;
-    h6 {
-      margin: .4em;
+  .course {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: $button-width 50px 50px auto ; 
+    padding: 0;
+    button {
+      border: none;
+      width: $button-width;
+      border: solid 1px white;
+      outline: none;
+      /* margin-left: auto; */
     }
-    ul {
-      margin: 0 1em 0 .4em;
-      padding: 0;
-      font-size: .8em;
-      list-style: none;
+    div {
+      padding-left: .8em;
     }
   }
 }
 
 /* utilities */
+
+.marginBottom {
+  margin-top: .2em;
+}
 
 .unpaid {
   background: pink,

@@ -1,5 +1,5 @@
 <template>
-  <div class="item" :class="{ paid : member.paid }" v-for="member in members" :key="member.email">
+  <div class="item" v-for="member in members" :key="member.email">
     <div class="fullname">{{ member.lname }}, {{ member.fname }} </div> 
     <div class="phone">{{member.phone}}</div>
     <div class="email">{{member.email}}</div>
@@ -10,12 +10,13 @@
     <div :id="member.email" class="showMore hidden">
       <div class="moreInfo">
         <section>
-          <h6>POT jäsenyys</h6>
+          <h6>Jäsenyys</h6>
           <ul>
             <li v-for="course in member.courses" :key="course">
-              <span v-if="course.courseId">{{ course.courseId }}, {{ course.role }}</span>
-              <span v-if="course.support">kannatusjäsen</span>
+              <span v-if="course.courseId == 'kannatus'">kannatusjäsen</span>
+              <span v-else>{{ course.courseId }}, {{ course.role }}</span>
             </li>
+            <li v-if="member.support">kannatusjäsen</li>
           </ul>
         </section>
         <section>
