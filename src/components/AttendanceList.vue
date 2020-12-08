@@ -1,5 +1,25 @@
 <template>
 
+  <nav class="secondary">
+    <a href="" @click.prevent="$emit('togglemodal', 'membersByCourses')">Sähköpostit kursseittain</a>
+  </nav>
+
+  <div id="membersByCourses" class="hidden modal">
+    <button @click="$emit('togglemodal', 'membersByCourses')">sulje</button>
+    <span id="copyMessage" class="hidden sm">ok</span>
+    <div class="mail-list">
+      <p>Sähköpostia lähettäessäsi sähköpostien osoitteet tulee kirjoittaa BCC-kenttään ja TO-kenttään oma osoitteesi, eli osoite mistä sähköpostia lähetetään. Painamalla nappulaa "kopioi leikepöytään" voit helposti kopioida kaikki osoitteet.</p>
+      <h2>Alkeet</h2> <button class="margin-bottom" @click="$emit('copy-to-clipboard', 'alkeet')">kopioi leikepöytään</button>
+      <textarea id="alkeet" :value="sAlkeet" readonly></textarea>
+      <h2>Alkeet oman parin kanssa</h2> <button class="margin-bottom" @click="$emit('copy-to-clipboard', 'alkeet-oma')">kopioi leikepöytään</button>
+      <textarea id="alkeet-oma" :value="sAlkeetOma" readonly></textarea>
+      <h2>Alkeisjatko</h2> <button class="margin-bottom" @click="$emit('copy-to-clipboard', 'alkeisjatko')">kopioi leikepöytään</button>
+      <textarea id="alkeisjatko" :value="sAlkeisjatko" readonly></textarea>
+      <h2>Jatko</h2> <button class="margin-bottom" @click="$emit('copy-to-clipboard', 'jatko')">kopioi leikepöytään</button>
+      <textarea id="jatko" :value="sJatko" readonly></textarea>
+    </div>
+  </div>
+
 <div class="max-size">
 
     <h2>Alkeet</h2>
@@ -32,27 +52,47 @@ export default {
       alkeet: [],
       alkeetOma: [],
       alkeisjatko: [],
-      jatko: []
+      jatko: [],
+      sAlkeet: '',
+      sAlkeetOma: '',
+      sAlkeisjatko: '',
+      sJatko: ''
     }
   },
   mounted: function() {
     this.$nextTick(function() {
+
+      const aAlkeet = []
+      const aAlkeetOma = []
+      const aAlkeisjatko = []
+      const aJatko = []
+
       this.members.forEach(member => {
           member.courses.forEach(course => {
               if (course.courseId === 'alkeet') {
                 this.alkeet.push(`${member.lname}, ${member.fname}`)
+                aAlkeet.push(member.email)
               }
               if (course.courseId === 'alkeetOma') {
                 this.alkeetOma.push(`${member.lname}, ${member.fname}`)
+                aAlkeetOma.push(member.email)
               }
               if (course.courseId === 'alkeisjatko') {
                 this.alkeisjatko.push(`${member.lname}, ${member.fname}`)
+                aAlkeisjatko.push(member.email)
               }
               if (course.courseId === 'jatko') {
                 this.jatko.push(`${member.lname}, ${member.fname}`)
+                aJatko.push(member.email)
               }
           })
       })
+
+      this.sAlkeet = aAlkeet.toString()
+      this.sAlkeetOma = aAlkeetOma.toString()
+      this.sAlkeisjatko = aAlkeisjatko.toString()
+      this.sJatko = aJatko.toString()
+
     })
   }
   }
@@ -75,6 +115,17 @@ export default {
   }
 }
 
+.modal {
+  h2 {
+    display: inline;
+    padding-right: .8em;
+  }
+}
+
+/* utilities */
+
+.margin-bottom {
+    margin-bottom: 1em;
+}
 
 </style>
-

@@ -4,7 +4,7 @@
   </nav>
   <div id="mails" class="hidden modal">
     <button @click="$emit('togglemodal', 'mails')">sulje</button>
-    <button @click="copyToClipboard">kopioi leikepöytään</button>
+    <button @click="$emit('copy-to-clipboard', 'copyToClipboard')">kopioi leikepöytään</button>
     <span id="copyMessage" class="hidden sm">ok</span>
     <div id="mail-list" class="mail-list">
       <p>Sähköpostia lähettäessäsi sähköpostien osoitteet tulee kirjoittaa BCC-kenttään ja TO-kenttään oma osoitteesi, eli osoite mistä sähköpostia lähetetään. Painamalla nappulaa "kopioi leikepöytään" voit helposti kopioida kaikki osoitteet.</p>
@@ -17,7 +17,7 @@
     <div class="email">{{member.email}}</div>
     <div class="margin"></div>
     <button @click="showMore(member.email)">näytä lisää</button>
-    <button class="warning" @click="$emit('removemember', member)">poista</button>
+    <button class="warning" @click="$emit('remove-member', member)">poista</button>
     <div :id="member.email" class="showMore hidden">
       <div class="moreInfo">
         <section>
@@ -57,14 +57,6 @@ export default {
     showMore: function(memberId) {
       const member = document.getElementById(memberId)
       member.classList.toggle('hidden')
-    },
-    copyToClipboard: function() {
-      const textToCopy = document.getElementById('copyToClipboard')
-      textToCopy.select()
-      document.execCommand('copy')
-      if (window.getSelection) {window.getSelection().removeAllRanges();}
-      else if (document.selection) {document.selection.empty();}
-      document.getElementById('copyMessage').classList.remove('hidden')
     },
     populateMails: function() {
       this.allmails = ''

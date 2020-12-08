@@ -6,7 +6,8 @@
 
   <div id="non-paid-mails" class="hidden modal">
     <button @click="$emit('togglemodal', 'non-paid-mails')">sulje</button>
-    <button @click="copyToClipboard">kopioi leikepöytään</button>
+    <button @click="$emit('copy-to-clipboard', 'copyToClipboard')">kopioi leikepöytään</button>
+    <span id="copyMessage" class="hidden sm">ok</span>
     <div class="mail-list">
       <p>Sähköpostia lähettäessäsi sähköpostien osoitteet tulee kirjoittaa BCC-kenttään ja TO-kenttään oma osoitteesi, eli osoite mistä sähköpostia lähetetään. Painamalla nappulaa "kopioi leikepöytään" voit helposti kopioida kaikki osoitteet.</p>
       <textarea id="copyToClipboard" :value="allmails" readonly></textarea>
@@ -72,13 +73,10 @@ export default {
       member.courses.forEach(course => {
         if (!course.paid) {
           nonPaidMembers.add(member.email)
-          // if (nonPaidMembers.indexOf(member.mail) !== -1) nonPaidMembers.push(member.email)
-          // console.log(nonPaidMembers.indexOf('leo.dicaprio@mahti.org'))
-          // nonPaidMembers.push(member.email)
         } 
       })
     })
-    console.log(nonPaidMembers)
+    this.allmails = [...nonPaidMembers].toString()
   }
 }
 
@@ -119,7 +117,6 @@ $button-width: 120px;
       width: $button-width;
       border: solid 1px white;
       outline: none;
-      /* margin-left: auto; */
     }
     div {
       padding-left: .8em;

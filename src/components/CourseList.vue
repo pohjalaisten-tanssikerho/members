@@ -52,8 +52,6 @@ export default {
     background: lightgray;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    &:first-child {
-    }
   }
   .day-margin {
     width: 50px;
@@ -65,6 +63,7 @@ export default {
     width: .8em;
     height: .8em;
     border: solid 1px black;
+    background-color: white;
     margin: auto;
     margin-top: 4px;
   }

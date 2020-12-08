@@ -6,15 +6,19 @@
   </nav>
   <AllMembers 
     v-bind:members="members" 
-    @removemember="removeMember" 
+    @remove-member="removeMember" 
     @togglemodal="toggleModal"
+    @copy-to-clipboard="copyToClipboard"
     v-if="displays.AllMembers" />
   <PaymentCheck
     v-bind:members="members" 
     @togglemodal="toggleModal" 
+    @copy-to-clipboard="copyToClipboard" 
     v-if="displays.PaymentCheck"/>
   <AttendanceList 
     v-bind:members="members"
+    @togglemodal="toggleModal" 
+    @copy-to-clipboard="copyToClipboard" 
     v-if="displays.AttendanceList"/>
 </template>
 
@@ -48,7 +52,15 @@ export default {
     },
     toggleModal: function(modal){
       document.getElementById(modal).classList.toggle('hidden')
-    }
+    },
+    copyToClipboard: function(copyTarget) {
+      const textToCopy = document.getElementById(copyTarget)
+      textToCopy.select()
+      document.execCommand('copy')
+      if (window.getSelection) {window.getSelection().removeAllRanges();}
+      else if (document.selection) {document.selection.empty();}
+      document.getElementById('copyMessage').classList.remove('hidden')
+    },
   },
   mounted: function() {
     this.members.sort((a, b) => (a.lname > b.lname) ? 1 : -1)
@@ -102,7 +114,7 @@ nav {
   border-radius: 5px;
   border: solid 2px gray;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 0);
   padding: .5em;
   text-align: left;
   .mail-list {
