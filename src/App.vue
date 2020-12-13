@@ -47,8 +47,8 @@ export default {
       this.members = this.members.filter(obj => { return obj !== memberObj })
     },
     display: function(target) {
-        Object.keys(this.displays).forEach(k => this.displays[k] = false);
-        this.displays[target] = true
+      Object.keys(this.displays).forEach(k => this.displays[k] = false);
+      this.displays[target] = true
     },
     toggleModal: function(modal){
       document.getElementById(modal).classList.toggle('hidden')
@@ -64,6 +64,11 @@ export default {
   },
   mounted: function() {
     this.members.sort((a, b) => (a.lname > b.lname) ? 1 : -1)
+
+    // this.payments
+    //   .then(response =>  response.json())
+    //   .then(data => console.log(data))
+
   }
 }
 </script>
