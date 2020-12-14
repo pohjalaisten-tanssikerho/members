@@ -28,7 +28,7 @@
 
         <div class="" v-if="course.courseId == 'alkeetOma'">alkeet omalla parilla</div>
         <div class="" v-if="course.courseId == 'alkeet'">alkeet</div>
-        <div class="" v-if="course.courseId == 'alkeisjatko'">jatko</div>
+        <div class="" v-if="course.courseId == 'alkeisjatko'">alkeisjatko</div>
         <div class="" v-if="course.courseId == 'jatko'">jatko</div>
         <div class="" v-if="course.courseId == 'kannatus'">kannatusjäsen</div>
 
@@ -36,12 +36,12 @@
     </div>
   </div>
 
-  <div v-else :pricess="prices">Ladataan hinnastoa...</div>
+  <div v-else :pricess="prices">Ladataan hintataulukkoa...</div>
 
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 // import VueAxios from 'vue-axios'
 
 export default {
@@ -51,62 +51,8 @@ export default {
   data() {
     return {
       allmails: null,
-      prices: {
-        "osakuntalainen": [
-          {
-            "name": "alkeet",
-            "price": "20€",
-            "ref": "1012"
-          },
-          {
-            "name": "alkeisjatko",
-            "price": "40€",
-            "ref": "1038"
-          },
-          {
-            "name": "jatko",
-            "price": "40€",
-            "ref": "1041"
-          }
-        ],
-        "opiskelija": [
-          {
-            "name": "alkeet",
-            "price": "40€",
-            "ref": "1119"
-          },
-          {
-            "name": "alkeisjatko",
-            "price": "60€",
-            "ref": "1135"
-          },
-          {
-            "name": "jatko",
-            "price": "60€",
-            "ref": "1148"
-          }
-        ],
-        "muut": [
-          {
-            "name": "alkeet",
-            "price": "80€",
-            "ref": "1915"
-          },
-          {
-            "name": "alkeisjatko",
-            "price": "90€",
-            "ref": "1931"
-          },
-          {
-            "name": "jatko",
-            "price": "90€",
-            "ref": "1944"
-          }
-        ]
-      }
+      prices: null
     }
-  },
-  computed: {
   },
   methods: {
     discounts: function(membership) {
@@ -121,7 +67,6 @@ export default {
       if (membership.club && membership.student) memberDiscount = 'osakuntalainen'
       else if (membership.student) memberDiscount = 'opiskelija'
       else memberDiscount = 'muut'
-      console.log(display, memberDiscount, courseDiscount)
 
       let courseDiscount = 0
       if (course.courseId == 'alkeetOma' || course == 'alkeet') courseDiscount = 0
@@ -132,36 +77,12 @@ export default {
         else if (display == 'ref') return '9991'
       } 
 
-      console.log('viimeinen: ')
-      console.log(this.prices['osakuntalainen'][0].price)
-      console.log(memberDiscount == 'osakuntalainen')
       if(courseDiscount <= 2 && courseDiscount >= 0) {
         return this.prices[memberDiscount][courseDiscount][display]
       }
 
-
-      // console.log(courseDiscount)
-      // setTimeout(() => {
-      //   console.log(this.prices[memberDiscount][0])
-      // }, 4000)
-      // console.log('onnistuiko viimein?')
-      // console.log(this.prices[memberDiscount])
-      // let foo = this.prices[memberDiscount]
-      // console.log(foo)
-      // console.log(this.prices[memberDiscount][0])
-
-      // console.log(courseDiscount)
-      // console.log(memberDiscount)
-        // return this.prices[memberDiscount][courseDiscount]
-      // return this.prices['osakuntalainen']
-
-    },
-    reference: function(membership) {
-      console.log(membership)
-      return '0033'
     },
     togglePaid: function(course) { 
-      console.log(course)
       course.paid = course.paid ? false : true
     }
   },
@@ -175,15 +96,9 @@ export default {
       })
     })
     this.allmails = [...nonPaidMembers].toString()
-    // axios
-    //   .get('https://raw.githubusercontent.com/pohjalaisten-tanssikerho/web-page/master/data/prices.json')
-    //     .then(response => {
-    //       console.log('Ensimmäinen kutsu: ', this.prices)
-    //       this.prices = response.data
-    //       console.log('Toinen kutsu: ', this.prices)
-    //       this.prices.osakuntalainen = response.data.osakuntalainen
-    //       console.log('Kolmas kutsu: ', this.prices['osakuntalainen'])
-    //     })
+    axios
+      .get('https://raw.githubusercontent.com/pohjalaisten-tanssikerho/web-page/master/data/prices.json')
+        .then(response => this.prices = response.data )
   }
 }
 
