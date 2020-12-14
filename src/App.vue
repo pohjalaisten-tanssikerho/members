@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { db } from './utilities/firebase.js'
 import AllMembers from './components/AllMembers.vue'
 import PaymentCheck from './components/PaymentCheck.vue'
 import AttendanceList from './components/AttendanceList.vue'
@@ -64,11 +65,7 @@ export default {
   },
   mounted: function() {
     this.members.sort((a, b) => (a.lname > b.lname) ? 1 : -1)
-
-    // this.payments
-    //   .then(response =>  response.json())
-    //   .then(data => console.log(data))
-
+    db.collection('2020k').add({ fname: 'Suvi', kurssi: 'alkeet' }).then(() => console.log('Käyttäjä luotu, käy katsomassa firebase'))
   }
 }
 </script>
