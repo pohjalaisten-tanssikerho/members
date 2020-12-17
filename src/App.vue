@@ -40,7 +40,8 @@ export default {
         { fname: 'Will', lname: 'Smith', email: 'will.smith@mahti.org', phone: '044 0000002', courses: [{courseId: 'alkeet', role: 'viejä', paid: true }], membership: [{ student: true, club: false, hyy: '003' }] },
         { fname: 'Denzel', lname: 'Washington', email: 'denzel.washington@mahti.org', phone: '044 0000003', courses: [{courseId: 'jatko', role: 'viejä', paid: true}], membership: [{ student: true, club: true, hyy: '004' }] }
       ],
-      displays: { AllMembers: true, PaymentCheck: false, AttendanceList: false }
+      displays: { AllMembers: true, PaymentCheck: false, AttendanceList: false },
+      firebaseMembers: db.collection('2020k')
     }
   },
   methods: {
@@ -65,7 +66,13 @@ export default {
   },
   mounted: function() {
     this.members.sort((a, b) => (a.lname > b.lname) ? 1 : -1)
-    db.collection('2020k').add({ fname: 'Suvi', kurssi: 'alkeet' }).then(() => console.log('Käyttäjä luotu, käy katsomassa firebase'))
+    // db.collection('2020k').add({ fname: 'Suvi', kurssi: 'alkeet' }).then(() => console.log('Käyttäjä luotu, käy katsomassa firebase'))
+    this.firebaseMembers.get()
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          console.log(doc.id, ' => ', doc.data())
+        })
+      })
   }
 }
 </script>
