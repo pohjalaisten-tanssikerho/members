@@ -41,7 +41,12 @@ export default {
         { fname: 'Denzel', lname: 'Washington', email: 'denzel.washington@mahti.org', phone: '044 0000003', courses: [{courseId: 'jatko', role: 'viejä', paid: true}], membership: [{ student: true, club: true, hyy: '004' }] }
       ],
       displays: { AllMembers: true, PaymentCheck: false, AttendanceList: false },
-      firebaseMembers: db.collection('2020k')
+      firebaseDoc: [],
+    }
+  },
+  firestore() {
+    return {
+      firebaseDoc: db.collection('2020k').orderBy('lname'),
     }
   },
   methods: {
@@ -59,20 +64,44 @@ export default {
       const textToCopy = document.getElementById(copyTarget)
       textToCopy.select()
       document.execCommand('copy')
-      if (window.getSelection) {window.getSelection().removeAllRanges();}
-      else if (document.selection) {document.selection.empty();}
+      if (window.getSelection) {window.getSelection().removeAllRanges()}
+      else if (document.selection) {document.selection.empty()}
       document.getElementById('copyMessage').classList.remove('hidden')
     },
   },
   mounted: function() {
     this.members.sort((a, b) => (a.lname > b.lname) ? 1 : -1)
     // db.collection('2020k').add({ fname: 'Suvi', kurssi: 'alkeet' }).then(() => console.log('Käyttäjä luotu, käy katsomassa firebase'))
-    this.firebaseMembers.get()
-      .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-          console.log(doc.id, ' => ', doc.data())
-        })
-      })
+  },
+  created() {
+    // this.ref.onSnapshot((querySnapshot) => {
+    //   this.firebaseDoc = []
+    //   querySnapshot.forEach(doc => {
+    //     this.firebaseDoc.push({
+    //       key: doc.id,
+    //       email: doc.data().email
+    //     })
+    //     console.log(this.firebaseDoc['0'])
+    //   })
+    // })
+
+    // const someArray = [1, 12, 3, 4, 5, 1]
+    // console.log(someArray)
+    // this.firebaseDoc.forEach(item => { console.log(item.id) })
+    // console.log(this.firebaseDoc['DFZ7YLEaoGTVKnI7uM2k'])
+
+    // this.ref.get()
+    //   .then(function(querySnapshot) {
+    //     querySnapshot.forEach(function(doc) {
+    //       console.log(doc.id, ' => ', doc.data())
+    //       this.firebaseDoc = doc.data()
+    //     })
+    //   })
+    // setTimeout(() => {
+    //   this.firebaseDoc.forEach(data => { console.log(data.id) })
+    // }, 2000) 
+    // console.log(this.firebaseDoc.forEach(data => data.id))
+    // console.log(this.firebaseDoc)
   }
 }
 </script>
