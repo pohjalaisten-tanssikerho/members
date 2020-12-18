@@ -42,11 +42,7 @@ export default {
       ],
       displays: { AllMembers: true, PaymentCheck: false, AttendanceList: false },
       firebaseDoc: [],
-    }
-  },
-  firestore() {
-    return {
-      firebaseDoc: db.collection('2020k').orderBy('lname'),
+      fireMembers: [],
     }
   },
   methods: {
@@ -74,6 +70,18 @@ export default {
     // db.collection('2020k').add({ fname: 'Suvi', kurssi: 'alkeet' }).then(() => console.log('Käyttäjä luotu, käy katsomassa firebase'))
   },
   created() {
+    this.firebaseDoc = db.collection('2020k').orderBy('lname')
+    this.firebaseDoc.onSnapshot((query) => {
+      query.forEach(doc => {
+        this.fireMembers.push(doc.data())
+        // console.log(doc.id)
+      })
+    })
+    // console.log(this.firebaseDoc)
+    console.log(this.fireMembers)
+    this.fireMembers.forEach(entry => {
+      console.log(entry)
+    })
     // this.ref.onSnapshot((querySnapshot) => {
     //   this.firebaseDoc = []
     //   querySnapshot.forEach(doc => {
