@@ -11,13 +11,13 @@
       <textarea id="copyToClipboard" :value="allmails" readonly></textarea>
     </div>
   </div>
-  <div class="item" v-for="member in members" :key="member.email">
+  <div class="item" v-for="member in members" :key="member.email" :bind="members">
     <div class="fullname">{{ member.lname }}, {{ member.fname }} </div> 
-    <div class="phone">{{member.phone}}</div>
     <div class="email">{{member.email}}</div>
+    <div>{{ member.hometown }}</div>
     <div class="margin"></div>
     <button @click="showMore(member.email)">näytä lisää</button>
-    <button class="warning" @click="$emit('remove-member', member)">poista</button>
+    <button class="warning" @click="$emit('remove-member', member, member.id)">poista</button>
     <div :id="member.email" class="showMore hidden">
       <div class="moreInfo">
         <section>
@@ -52,7 +52,8 @@ export default {
       allmails: ''
     }
   },
-  props: ['members'],
+  props: ['members', 'firemembers'],
+  emits: ['removeMember', 'togglemodal', 'copyToClipboard'],
   methods: {
     showMore: function(memberId) {
       const member = document.getElementById(memberId)
@@ -78,7 +79,7 @@ export default {
 
 .item {
   display: grid;
-  grid-template-columns: 180px 140px 170px auto 85px 85px;
+  grid-template-columns: 180px 230px 100px auto 85px 85px;
   grid-template-rows: repeat(2, auto);
   background: lightgray;
   max-width: 850px;

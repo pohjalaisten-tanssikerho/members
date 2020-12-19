@@ -14,6 +14,7 @@
     v-bind:members="members" 
     @togglemodal="toggleModal" 
     @copy-to-clipboard="copyToClipboard" 
+    @toggle-paid="togglePaid"
     v-if="displays.PaymentCheck"/>
   <AttendanceList 
     v-bind:members="members"
@@ -22,32 +23,39 @@
     v-if="displays.AttendanceList"/>
 </template>
 
+
 <script>
 import { db } from './utilities/firebase.js'
 import AllMembers from './components/AllMembers.vue'
 import PaymentCheck from './components/PaymentCheck.vue'
 import AttendanceList from './components/AttendanceList.vue'
 
+// { fname: 'Greatman', lname: 'Lim', email: 'fname.lname@mahti.com', phone: '044 5200985', courses: [{ courseId: 'jatko', role: 'viejä', paid: true }], membership: [{ student: false, club: false, hyy: '' }] },
+// { fname: 'Tom', lname: 'Hanks', email: 'tom.hanks@mahti.org', phone: '044 0000000', courses: [{ courseId: 'alkeetOma', role: 'viejä', paid: false }, { courseId: 'kannatus', amount: '20', paid: true }], membership: [{ student: true, club: true, hyy: '001' }] },
+// { fname: 'Leonardo', lname: 'DiCaprio', email: 'leo.dicaprio@mahti.org', phone: '044 0000001', courses: [{ courseId: 'alkeet', role: 'viejä', paid: true }, { courseId: 'alkeisjatko', role: 'seuraaja', paid: false }, { courseId: 'kannatus', amount: '10', paid: false }], membership: [{ student: true, club: false, hyy: '002' }] },
+// { fname: 'Will', lname: 'Smith', email: 'will.smith@mahti.org', phone: '044 0000002', courses: [{courseId: 'alkeet', role: 'viejä', paid: true }], membership: [{ student: true, club: false, hyy: '003' }] },
+// { fname: 'Denzel', lname: 'Washington', email: 'denzel.washington@mahti.org', phone: '044 0000003', courses: [{courseId: 'jatko', role: 'viejä', paid: true}], membership: [{ student: true, club: true, hyy: '004' }] }
+
 export default {
   name: 'App',
   components: { AllMembers, PaymentCheck, AttendanceList },
   data() {
     return {
-      members: [
-        { fname: 'Greatman', lname: 'Lim', email: 'fname.lname@mahti.com', phone: '044 5200985', courses: [{ courseId: 'jatko', role: 'viejä', paid: true }], membership: [{ student: false, club: false, hyy: '' }] },
-        { fname: 'Tom', lname: 'Hanks', email: 'tom.hanks@mahti.org', phone: '044 0000000', courses: [{ courseId: 'alkeetOma', role: 'viejä', paid: false }, { courseId: 'kannatus', amount: '20', paid: true }], membership: [{ student: true, club: true, hyy: '001' }] },
-        { fname: 'Leonardo', lname: 'DiCaprio', email: 'leo.dicaprio@mahti.org', phone: '044 0000001', courses: [{ courseId: 'alkeet', role: 'viejä', paid: true }, { courseId: 'alkeisjatko', role: 'seuraaja', paid: false }, { courseId: 'kannatus', amount: '10', paid: false }], membership: [{ student: true, club: false, hyy: '002' }] },
-        { fname: 'Will', lname: 'Smith', email: 'will.smith@mahti.org', phone: '044 0000002', courses: [{courseId: 'alkeet', role: 'viejä', paid: true }], membership: [{ student: true, club: false, hyy: '003' }] },
-        { fname: 'Denzel', lname: 'Washington', email: 'denzel.washington@mahti.org', phone: '044 0000003', courses: [{courseId: 'jatko', role: 'viejä', paid: true}], membership: [{ student: true, club: true, hyy: '004' }] }
-      ],
+      members: new Array(),
       displays: { AllMembers: true, PaymentCheck: false, AttendanceList: false },
-      firebaseDoc: [],
-      fireMembers: [],
-    }
+      currentCollection: '2020k',
+    }  
   },
   methods: {
-    removeMember: function(memberObj) {
-      this.members = this.members.filter(obj => { return obj !== memberObj })
+    removeMember: function(memberView, fireId) {
+      db.collection(this.currentCollection)
+        .doc(fireId)
+        .delete()
+        .then(() => { 
+          this.members = new Array()
+          this.fetchFireBase(this.currentCollection)
+        })
+        .catch(() => { 'Failed to removing document: ', fireId })
     },
     display: function(target) {
       Object.keys(this.displays).forEach(k => this.displays[k] = false);
@@ -55,6 +63,35 @@ export default {
     },
     toggleModal: function(modal){
       document.getElementById(modal).classList.toggle('hidden')
+    },
+    togglePaid: function(courseId, memberId, courseElement) {
+      const courses = new Array()
+      db.collection(this.currentCollection)
+        .doc(memberId)
+        .get()
+        .then(doc => {
+            courses.push( ...doc.data().courses )
+            courses.forEach(course => {
+                if (course.courseId === courseId) { course.paid = !(course.paid)}
+            }) 
+            db.collection(this.currentCollection)
+              .doc(memberId)
+              .update({
+                  courses: courses
+              })
+              .then(() => courseElement.paid = courseElement.paid ? false : true)
+        })
+
+      // console.log(course)
+
+      // db.collection(this.currentCollection)
+      //   .doc(memberId)
+      //   .update({
+      //       fname: 'Jalasjärvi!'
+      //   })
+      //   .then(() => { console.log('Updated!') })
+      //   .catch(() => console.error('Error, could not update: '), memberId)
+      console.log(courseId, memberId)
     },
     copyToClipboard: function(copyTarget) {
       const textToCopy = document.getElementById(copyTarget)
@@ -64,52 +101,29 @@ export default {
       else if (document.selection) {document.selection.empty()}
       document.getElementById('copyMessage').classList.remove('hidden')
     },
+    fetchFireBase: function(collection) {
+      console.log(collection)
+      db.collection(collection)
+        .orderBy('lname')
+        .get()
+        .then(querySnapshot => {
+            querySnapshot.forEach(doc => {
+                this.members.push({ ...doc.data(), id: doc.id })
+            })
+        })
+    }
   },
   mounted: function() {
     this.members.sort((a, b) => (a.lname > b.lname) ? 1 : -1)
-    // db.collection('2020k').add({ fname: 'Suvi', kurssi: 'alkeet' }).then(() => console.log('Käyttäjä luotu, käy katsomassa firebase'))
   },
   created() {
-    this.firebaseDoc = db.collection('2020k').orderBy('lname')
-    this.firebaseDoc.onSnapshot((query) => {
-      query.forEach(doc => {
-        this.fireMembers.push(doc.data())
-        // console.log(doc.id)
-      })
-    })
-    // console.log(this.firebaseDoc)
-    console.log(this.fireMembers)
-    this.fireMembers.forEach(entry => {
-      console.log(entry)
-    })
-    // this.ref.onSnapshot((querySnapshot) => {
-    //   this.firebaseDoc = []
-    //   querySnapshot.forEach(doc => {
-    //     this.firebaseDoc.push({
-    //       key: doc.id,
-    //       email: doc.data().email
+    this.fetchFireBase(this.currentCollection)
+    // this.firebaseDoc = db.collection(this.currentCollection).orderBy('lname')
+    // this.firebaseDoc.get().then(querySnapshot => {
+    //     querySnapshot.forEach(doc => {
+    //         this.members.push({...doc.data(), id: doc.id})
     //     })
-    //     console.log(this.firebaseDoc['0'])
-    //   })
     // })
-
-    // const someArray = [1, 12, 3, 4, 5, 1]
-    // console.log(someArray)
-    // this.firebaseDoc.forEach(item => { console.log(item.id) })
-    // console.log(this.firebaseDoc['DFZ7YLEaoGTVKnI7uM2k'])
-
-    // this.ref.get()
-    //   .then(function(querySnapshot) {
-    //     querySnapshot.forEach(function(doc) {
-    //       console.log(doc.id, ' => ', doc.data())
-    //       this.firebaseDoc = doc.data()
-    //     })
-    //   })
-    // setTimeout(() => {
-    //   this.firebaseDoc.forEach(data => { console.log(data.id) })
-    // }, 2000) 
-    // console.log(this.firebaseDoc.forEach(data => data.id))
-    // console.log(this.firebaseDoc)
   }
 }
 </script>

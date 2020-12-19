@@ -21,8 +21,8 @@
       <div class="fullname">{{ member.lname }}, {{ member.fname }} </div> 
       <div class="discount">{{ discounts(member.membership[0]) }}</div>
       <div class="course" :class="{ marginBottom : index, unpaid : !course.paid }" v-for="(course, index) in member.courses" :key="index">
-        <button @click="togglePaid(course)" v-if="course.paid">poista maksu</button>
-        <button @click="togglePaid(course)" v-else>merkitse maksu</button>
+      <button @click="$emit('toggle-paid', course.courseId, member.id, course)" v-if="course.paid">poista maksu</button>
+        <button @click="$emit('toggle-paid', course.courseId, member.id, course)" v-else>merkitse maksu</button>
         <div class="left-padding">{{ payment(member.membership[0], course, 'price')}}</div>
         <div class="left-padding">{{ payment(member.membership[0], course, 'ref')}}</div>
 

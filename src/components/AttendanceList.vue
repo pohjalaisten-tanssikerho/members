@@ -46,6 +46,7 @@ export default {
 
   name: 'AttendanceList',
   props: ['members'],
+  emits: ['togglemodal', 'copyToClipboard'],
   components: { CourseList },
   data() {
     return {
