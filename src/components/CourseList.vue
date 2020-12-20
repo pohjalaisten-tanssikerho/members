@@ -1,15 +1,15 @@
 <template>
-      <div class="flex">
-        <div class="firstCell"></div>
-        <div class="day" v-for="day in days" :key="day">{{ day }}</div>
-      </div>
-    <div class="item" v-for="(member, index) in courseMembers" :key="index">
-      <div class="flex">
-        <div class="fullname firstCell">{{ member }}</div> 
-        <div class="day-margin" :class="{ onlyitem : hasOneMember(courseMembers) }" v-for="day in days" :key="day"><div class="checkbox"></div></div>
-      </div>
+  <div class="flex">
+    <div class="first-cell"></div>
+    <div class="day" v-for="day in days" :key="day">{{ day }}</div>
+  </div>
+  <div class="item" v-for="(member, index) in courseMembers" :key="index">
+    <div class="flex">
+      <div class="fullname first-cell">{{ member }}</div> 
+      <div class="day-margin" :class="{ onlyitem : hasOneMember(courseMembers) }" v-for="day in days" :key="day"><div class="checkbox"></div></div>
     </div>
-
+  </div>
+  <div class="print-brake"></div>
 </template>
 
 <script>
@@ -50,7 +50,7 @@ $opacity-half: rgba(0, 0, 0, 0.47);
 
 .flex {
   display: flex;
-  .firstCell {
+  .first-cell {
     width: 180px;
   }
   .day {

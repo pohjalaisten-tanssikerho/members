@@ -36,7 +36,9 @@
     </div>
   </div>
 
-  <div v-else :pricess="prices">Ladataan hintataulukkoa...</div>
+  <div v-else :pricess="prices">
+    <p>Ladataan hintataulukkoa...</p>
+  </div>
 
 </template>
 

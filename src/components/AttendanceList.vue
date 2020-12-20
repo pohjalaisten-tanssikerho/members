@@ -1,7 +1,10 @@
 <template>
 
+  <p class="hide-from-print">Printtaaminen piilottaa kaikki tarpeettoman sivulta. Printtaus-asetuksista kannattaa valita printtaus taustakuvien kanssa.</p>
+
   <nav class="nav-secondary">
-    <a href="" @click.prevent="$emit('togglemodal', 'membersByCourses')">Sähköpostit kursseittain</a>
+    <a href="" @click.prevent="$emit('togglemodal', 'membersByCourses')">sähköpostit kursseittain</a>
+    <a href="" @click.prevent="print">printtaa</a>
   </nav>
 
   <div id="membersByCourses" class="hidden modal">
@@ -23,16 +26,16 @@
 <div class="max-size">
 
     <h2>Alkeet</h2>
-    <CourseList v-bind:courseMembers="alkeet" />
+    <CourseList class="print-brake" v-bind:courseMembers="alkeet" />
 
     <h2>Alkeet oman parin kanssa</h2>
-    <CourseList v-bind:courseMembers="alkeetOma" />
+    <CourseList class="print-brake" v-bind:courseMembers="alkeetOma" />
 
     <h2>Alkeisjatko</h2>
-    <CourseList v-bind:courseMembers="alkeisjatko" />
+    <CourseList class="print-brake" v-bind:courseMembers="alkeisjatko" />
 
     <h2>Jatko</h2>
-    <CourseList v-bind:courseMembers="jatko" />
+    <CourseList class="print-brake" v-bind:courseMembers="jatko" />
 
 </div>
 
@@ -95,8 +98,13 @@ export default {
       this.sJatko = aJatko.toString()
 
     })
+  },
+  methods: {
+    print: function() {
+      window.print()
+    }
   }
-  }
+}
 
 </script>
 
@@ -114,11 +122,11 @@ $opacity-half: rgba(0, 0, 0, 0.47);
 .max-size {
   max-width: 900px;
   margin: 0 auto;
+  margin-bottom: 1rem;
   color: $white;
   h2 {
     margin-bottom: .8em;
     background-color: $opacity-half;
-    /* border-radius: 5px; */
     padding: .4em;
     color: $white;
   }
@@ -140,4 +148,39 @@ $opacity-half: rgba(0, 0, 0, 0.47);
     margin-bottom: 1em;
 }
 
+</style>
+
+<style lang="scss" media="print">
+@page { size: landscape; }
+@media print {
+  nav, .hide-from-print {
+    display: none;
+  }
+  .max-size {
+    margin: 0 auto;
+    margin-bottom: 1rem;
+    color: black;
+    h2 {
+      margin-bottom: .8em;
+      background-color: lightgray;
+      padding: .4em;
+    }
+     h2 ~ h2 {
+       margin-top: 2em;
+     } 
+  }
+
+  * {
+    color: black !important;
+  }
+
+  .print-brake {
+    page-break-after: always !important;
+  }
+
+  body {
+    background-image: none !important;
+  }
+
+}
 </style>

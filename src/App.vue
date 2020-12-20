@@ -11,10 +11,10 @@
       </li>
     </ul>
   </nav>
-  <nav id="nav-views" class="primary">
-    <a href="" @click.prevent="display('AllMembers')">Kaikki jäsenet</a>
-    <a href="" @click.prevent="display('PaymentCheck')">Maksujen tarkastus</a>
-    <a href="" @click.prevent="display('AttendanceList')">Läsnäololistat</a>
+  <nav id="nav-views" class="primary hide-from-print">
+    <a href="" class="hide-from-print" @click.prevent="display('AllMembers')">Kaikki jäsenet</a>
+    <a href="" class="hide-from-print" @click.prevent="display('PaymentCheck')">Maksujen tarkastus</a>
+    <a href="" class="hide-from-print" @click.prevent="display('AttendanceList')">Läsnäololistat</a>
   </nav>
   <AllMembers 
     v-bind:members="members" 
@@ -247,6 +247,7 @@ p {
     background-color: $nightblue;
     border: solid 2px $tintblue;
     padding: .4rem;
+    margin-right: 1rem;
     &:hover {
       border-color: $neonblue;
     }
@@ -316,6 +317,5 @@ p {
 .hidden {
   display: none;
 }
-
 
 </style>
