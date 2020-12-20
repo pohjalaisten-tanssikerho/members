@@ -1,5 +1,5 @@
 <template>
-  <nav class="secondary">
+  <nav class="nav-secondary">
     <a href="" @click.prevent="$emit('togglemodal', 'mails')">Sähköpostit</a>
   </nav>
   <div id="mails" class="hidden modal">
@@ -119,7 +119,13 @@ $opacity-half: rgba(0, 0, 0, 0.47);
     margin-right: 100px;
     background-color: $nightblue;
     &.warning {
-      background: $neonblue;
+      background: $blue;
+    }
+    &:hover {
+      border-color: $neonblue;
+    }
+    &:active {
+      border-color: $orange;
     }
   }
   .moreInfo {

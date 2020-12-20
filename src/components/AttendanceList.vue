@@ -1,6 +1,6 @@
 <template>
 
-  <nav class="secondary">
+  <nav class="nav-secondary">
     <a href="" @click.prevent="$emit('togglemodal', 'membersByCourses')">Sähköpostit kursseittain</a>
   </nav>
 

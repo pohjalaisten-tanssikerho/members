@@ -216,28 +216,42 @@ p {
 #nav-views {
   display: flex;
   justify-content: center;
-  margin-bottom: 1em;
+  margin: 1em;
   a {
-    background: lightblue;
-    border: solid 2px $white;
-    border-radius: 5px;
-    padding: 1em;
-    &:visited {
-      color: black;
+    background: $tintblue;
+    border: solid 2px $nightblue;
+    padding: 1rem;
+    margin: .7rem;
+    &:visited, &:active, &:link {
+      color: $white;
       text-decoration: none;
+    }
+    &:hover {
+      border-color: $neonblue;
     }
     &:active {
-      color: $white;
-    }
-    &:link {
-      text-decoration: none;
-      color: $white;
+      border-color: $orange;
     }
   }
   &.secondary {
     a {
       background: lightgray;
       padding: .5em;
+    }
+  }
+}
+
+.nav-secondary {
+  margin: 1rem;
+  a {
+    background-color: $nightblue;
+    border: solid 2px $tintblue;
+    padding: .4rem;
+    &:hover {
+      border-color: $neonblue;
+    }
+    &:active {
+      border-color: $orange;
     }
   }
 }
@@ -261,6 +275,12 @@ p {
     margin-right: .4em;
     background: $lightblue;
     color: $white;
+    &:hover {
+      background-color: $blue;
+    }
+    &:active {
+      border-color: $orange;
+    }
   }
   .sm {
     font-size: .8em;

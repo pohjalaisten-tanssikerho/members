@@ -2,7 +2,7 @@
 
   <div v-if="prices" :prices="prices">
 
-    <nav class="secondary">
+    <nav class="nav-secondary">
       <a href="" @click.prevent="$emit('togglemodal', 'non-paid-mails')">Ei maksaneiden sähköpostit</a>
     </nav>
 
