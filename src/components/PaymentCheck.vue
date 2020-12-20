@@ -106,18 +106,25 @@ export default {
 
 <style lang="scss" scoped>
 
+$white: #e9f3ff;
+$orange: #fb9039;
+$blue: #062f4f;
+$lightblue: #0b3c5d;
+$neonblue: #009fff;
+$nightblue: #022140;
+$tintblue: #05386b;
+$opacity-half: rgba(0, 0, 0, 0.47);
+
 $button-width: 120px;
 
 .item {
   display: grid;
   grid-template-columns: 180px auto;
   grid-template-rows: auto;
-  background: lightgray;
+  background: $opacity-half;
   max-width: 400px;
   margin: .2em auto;
   padding: .3em;
-  border-radius: 3px;
-  background-color: lightgray;
   .discount {
     text-align: right;
     height: 1.5em;
@@ -128,6 +135,7 @@ $button-width: 120px;
   div {
     padding: .2em;
     text-align: left;
+    color: white;
   }
   .course {
     grid-column: span 2;
@@ -137,7 +145,9 @@ $button-width: 120px;
     button {
       border: none;
       width: $button-width;
-      border: solid 1px white;
+      border: solid 1px $tintblue;
+      background-color: $nightblue;
+      color: $white;
       outline: none;
     }
     div {
@@ -151,18 +161,5 @@ $button-width: 120px;
 .marginBottom {
   margin-top: .2em;
 }
-
-.unpaid {
-  background: pink,
-}
-
-.warning {
-  background: red;
-}
-
-.hidden {
-  display: none;
-}
-
 
 </style>

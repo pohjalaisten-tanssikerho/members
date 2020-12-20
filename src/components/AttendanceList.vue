@@ -102,14 +102,25 @@ export default {
 
 <style lang="scss" scoped>
 
+$white: #e9f3ff;
+$orange: #fb9039;
+$blue: #062f4f;
+$lightblue: #0b3c5d;
+$neonblue: #009fff;
+$nightblue: #022140;
+$tintblue: #05386b;
+$opacity-half: rgba(0, 0, 0, 0.47);
+
 .max-size {
   max-width: 900px;
   margin: 0 auto;
+  color: $white;
   h2 {
     margin-bottom: .8em;
-    background-color: lightgray;
-    border-radius: 5px;
+    background-color: $opacity-half;
+    /* border-radius: 5px; */
     padding: .4em;
+    color: $white;
   }
   h2 ~ h2 {
     margin-top: 2em;

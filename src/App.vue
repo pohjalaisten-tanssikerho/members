@@ -1,5 +1,17 @@
 <template>
-  <nav class="primary">
+  <nav id="nav-main">
+    <ul>
+      <li>analyysi</li>
+      <li>
+        <span>jäsenrekisteri:</span>
+        <span><a href="#">2020k</a></span>
+        <span><a href="#">2020s</a></span>
+        <span><a href="#">2021s</a></span>
+        <span><a href="#">2021k</a></span>
+      </li>
+    </ul>
+  </nav>
+  <nav id="nav-views" class="primary">
     <a href="" @click.prevent="display('AllMembers')">Kaikki jäsenet</a>
     <a href="" @click.prevent="display('PaymentCheck')">Maksujen tarkastus</a>
     <a href="" @click.prevent="display('AttendanceList')">Läsnäololistat</a>
@@ -129,22 +141,85 @@ export default {
 </script>
 
 <style lang="scss">
+
+$white: #e9f3ff;
+$orange: #fb9039;
+$blue: #062f4f;
+$lightblue: #0b3c5d;
+$neonblue: #009fff;
+$nightblue: #022140;
+$tintblue: #05386b;
+$opacity-half: rgba(0, 0, 0, 0.47);
+
+body {
+  margin: 0;
+  background-image: url("https://raw.githubusercontent.com/pohjalaisten-tanssikerho/web-page/master/static/img/bg.jpg");
+  background-position: center top;
+}
+
+a, a:link, a:visited {
+  color: $white;
+  text-decoration: none;
+}
+
+p {
+  color: $white;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin: 0;
 }
 
-nav {
+#nav-main {
+  border: 3px solid $tintblue;
+  border-left: none;
+  border-right: none;
+  background-color: $nightblue;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  ul {
+    list-style: none;
+    li {
+      display: inline-block;
+      margin-right: 1rem;
+      color: $white;
+      text-transform: uppercase;
+      font-size: .9rem;
+      padding-bottom: .3rem;
+      span {
+        margin-left: .7rem;
+        padding-bottom: .3rem;
+        border-bottom: solid 4px $tintblue;
+        &:first-of-type {
+          border-bottom: solid 4px $blue;
+        }
+        &:hover:not(:first-of-type) {
+          border-bottom-color: $orange;
+        }
+      }
+      &:first-of-type {
+        border-bottom: solid 4px $tintblue;
+        &:hover {
+          border-bottom-color: $orange;
+        }
+      }
+    }
+  }
+}
+
+#nav-views {
   display: flex;
   justify-content: center;
   margin-bottom: 1em;
   a {
     background: lightblue;
-    border: solid 2px white;
+    border: solid 2px $white;
     border-radius: 5px;
     padding: 1em;
     &:visited {
@@ -152,11 +227,11 @@ nav {
       text-decoration: none;
     }
     &:active {
-      color: white;
+      color: $white;
     }
     &:link {
       text-decoration: none;
-      color: white;
+      color: $white;
     }
   }
   &.secondary {
@@ -170,9 +245,8 @@ nav {
 .modal {
   position: absolute;
   width: 700px;
-  background: lightgray;
-  border-radius: 5px;
-  border: solid 2px gray;
+  background: $nightblue;
+  border: solid 2px $tintblue;
   left: 50%;
   transform: translate(-50%, 0);
   padding: .5em;
@@ -182,10 +256,11 @@ nav {
   }
   button {
     border: none;
-    border: solid 1px white;
+    border: solid 1px $tintblue;
     outline: none;
     margin-right: .4em;
-    background: white;
+    background: $lightblue;
+    color: $white;
   }
   .sm {
     font-size: .8em;
@@ -194,8 +269,8 @@ nav {
     width: 100%;
     border: none;
     resize: none;
-    background: lightgray;
-    color: #2c3e50;
+    background: $nightblue;
+    color: $white;
     outline: none;
     padding: 0;
     font-size: .9em;
@@ -203,7 +278,11 @@ nav {
   p {
     margin-top: 0;
   }
+  h2 {
+    color: $white;
+  }
 }
+
 
 /* utilities */
 .paid {
@@ -211,15 +290,12 @@ nav {
 }
 
 .unpaid {
-  background: red,
+  background: $tintblue;
 }
 
 .hidden {
   display: none;
 }
 
-.warning {
-  background: pink;
-}
 
 </style>

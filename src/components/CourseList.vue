@@ -35,6 +35,15 @@ export default {
 
 <style lang="scss" scoped>
 
+$white: #e9f3ff;
+$orange: #fb9039;
+$blue: #062f4f;
+$lightblue: #0b3c5d;
+$neonblue: #009fff;
+$nightblue: #022140;
+$tintblue: #05386b;
+$opacity-half: rgba(0, 0, 0, 0.47);
+
 .item {
   text-align: left;
 }
@@ -49,21 +58,22 @@ export default {
     margin: 0 .3em;
     padding-top: .3em;
     text-align: center;
-    background: lightgray;
+    background: $opacity-half;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
+    color: $white;
   }
   .day-margin {
     width: 50px;
     margin: 0 .3em;
     text-align: center;
-    background-color: lightgray;
+    background-color: $opacity-half;
   }
   .checkbox {
     width: .8em;
     height: .8em;
-    border: solid 1px black;
-    background-color: white;
+    border: solid 1px $tintblue;
+    background-color: $white;
     margin: auto;
     margin-top: 4px;
   }

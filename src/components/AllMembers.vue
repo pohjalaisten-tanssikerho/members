@@ -77,18 +77,27 @@ export default {
 
 <style lang='scss' scoped>
 
+$white: #e9f3ff;
+$orange: #fb9039;
+$blue: #062f4f;
+$lightblue: #0b3c5d;
+$neonblue: #009fff;
+$nightblue: #022140;
+$tintblue: #05386b;
+$opacity-half: rgba(0, 0, 0, 0.47);
+
 .item {
   display: grid;
   grid-template-columns: 180px 230px 100px auto 85px 85px;
   grid-template-rows: repeat(2, auto);
-  background: lightgray;
+  background: $opacity-half;
   max-width: 850px;
   margin: .2em auto;
   padding: .3em;
-  border-radius: 3px;
   div {
     padding: .2em;
     text-align: left;
+    color: $white;
   }
   .showMore {
     grid-column-start: 1;
@@ -102,11 +111,16 @@ export default {
     text-align: left;
   }
   button {
+    color: $white;
     border: none;
     width: 80px;
-    border: solid 1px white;
+    border: solid 1px $tintblue;
     outline: none;
     margin-right: 100px;
+    background-color: $nightblue;
+    &.warning {
+      background: $neonblue;
+    }
   }
   .moreInfo {
     display: flex;
@@ -125,21 +139,5 @@ export default {
   }
 }
 
-/* utilities */
-.paid {
-  background: lightgray,
-}
-
-.unpaid {
-  background: red,
-}
-
-.hidden {
-  display: none;
-}
-
-.warning {
-  background: pink;
-}
 
 </style>
