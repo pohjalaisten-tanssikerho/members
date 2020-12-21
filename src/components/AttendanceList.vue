@@ -1,6 +1,6 @@
 <template>
 
-  <p class="hide-from-print">Printtaaminen piilottaa kaikki tarpeettoman sivulta. Printtaus-asetuksista kannattaa valita printtaus taustakuvien kanssa.</p>
+  <p class="hide-from-print add-margin">Printtaaminen piilottaa kaikki tarpeettoman sivulta. Printtaus-asetuksista kannattaa valita printtaus taustakuvien kanssa.</p>
 
   <nav class="nav-secondary">
     <a href="" @click.prevent="$emit('togglemodal', 'membersByCourses')">sähköpostit kursseittain</a>
@@ -144,8 +144,8 @@ $opacity-half: rgba(0, 0, 0, 0.47);
 
 /* utilities */
 
-.margin-bottom {
-    margin-bottom: 1em;
+.add-margin {
+  margin-bottom: 2rem;
 }
 
 </style>

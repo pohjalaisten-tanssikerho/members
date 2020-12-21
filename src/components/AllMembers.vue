@@ -1,43 +1,45 @@
 <template>
-  <nav class="nav-secondary">
-    <a href="" @click.prevent="$emit('togglemodal', 'mails')">Sähköpostit</a>
-  </nav>
-  <div id="mails" class="hidden modal">
-    <button @click="$emit('togglemodal', 'mails')">sulje</button>
-    <button @click="$emit('copy-to-clipboard', 'copyToClipboard')">kopioi leikepöytään</button>
-    <span id="copyMessage" class="hidden sm">ok</span>
-    <div id="mail-list" class="mail-list">
-      <p>Sähköpostia lähettäessäsi sähköpostien osoitteet tulee kirjoittaa BCC-kenttään ja TO-kenttään oma osoitteesi, eli osoite mistä sähköpostia lähetetään. Painamalla nappulaa "kopioi leikepöytään" voit helposti kopioida kaikki osoitteet.</p>
-      <textarea id="copyToClipboard" :value="allmails" readonly></textarea>
+  <div class="margin-bottom">
+    <nav class="nav-secondary">
+      <a href="" @click.prevent="$emit('togglemodal', 'mails')">Sähköpostit</a>
+    </nav>
+    <div id="mails" class="hidden modal">
+      <button @click="$emit('togglemodal', 'mails')">sulje</button>
+      <button @click="$emit('copy-to-clipboard', 'copyToClipboard')">kopioi leikepöytään</button>
+      <span id="copyMessage" class="hidden sm">ok</span>
+      <div id="mail-list" class="mail-list">
+        <p>Sähköpostia lähettäessäsi sähköpostien osoitteet tulee kirjoittaa BCC-kenttään ja TO-kenttään oma osoitteesi, eli osoite mistä sähköpostia lähetetään. Painamalla nappulaa "kopioi leikepöytään" voit helposti kopioida kaikki osoitteet.</p>
+        <textarea id="copyToClipboard" :value="allmails" readonly></textarea>
+      </div>
     </div>
-  </div>
-  <div class="item" v-for="member in members" :key="member.email" :bind="members">
-    <div class="fullname">{{ member.lname }}, {{ member.fname }} </div> 
-    <div class="email">{{member.email}}</div>
-    <div>{{ member.hometown }}</div>
-    <div class="margin"></div>
-    <button @click="showMore(member.email)">näytä lisää</button>
-    <button class="warning" @click="$emit('remove-member', member, member.id)">poista</button>
-    <div :id="member.email" class="showMore hidden">
-      <div class="moreInfo">
-        <section>
-          <h6>Jäsenyys</h6>
-          <ul>
-            <li v-for="course in member.courses" :key="course">
-              <span v-if="course.courseId == 'kannatus'">kannatusjäsen</span>
-              <span v-else>{{ course.courseId }}, {{ course.role }}</span>
-            </li>
-            <li v-if="member.support">kannatusjäsen</li>
-          </ul>
-        </section>
-        <section>
-          <h6>Alennusoikeus</h6>
-          <ul>
-            <li v-if="member.membership[0].student">opiskelija</li>
-            <li v-if="member.membership[0].hyy.length > 0">{{ member.membership[0].hyy }}</li>
-            <li v-if="member.membership[0].club">osakuntalainen</li>
-          </ul>
-        </section>
+    <div class="item" v-for="member in members" :key="member.email" :bind="members">
+      <div class="fullname">{{ member.lname }}, {{ member.fname }} </div> 
+      <div class="email">{{member.email}}</div>
+      <div>{{ member.hometown }}</div>
+      <div class="margin"></div>
+      <button @click="showMore(member.email)">näytä lisää</button>
+      <button class="warning" @click="$emit('remove-member', member, member.id)">poista</button>
+      <div :id="member.email" class="showMore hidden">
+        <div class="moreInfo">
+          <section>
+            <h6>Jäsenyys</h6>
+            <ul>
+              <li v-for="course in member.courses" :key="course">
+                <span v-if="course.courseId == 'kannatus'">kannatusjäsen</span>
+                <span v-else>{{ course.courseId }}, {{ course.role }}</span>
+              </li>
+              <li v-if="member.support">kannatusjäsen</li>
+            </ul>
+          </section>
+          <section>
+            <h6>Alennusoikeus</h6>
+            <ul>
+              <li v-if="member.membership[0].student">opiskelija</li>
+              <li v-if="member.membership[0].hyy.length > 0">{{ member.membership[0].hyy }}</li>
+              <li v-if="member.membership[0].club">osakuntalainen</li>
+            </ul>
+          </section>
+        </div>
       </div>
     </div>
   </div>

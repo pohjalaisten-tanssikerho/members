@@ -243,6 +243,7 @@ p {
 
 .nav-secondary {
   margin: 1rem;
+  margin-bottom: 2rem;
   a {
     background-color: $nightblue;
     border: solid 2px $tintblue;
@@ -304,6 +305,9 @@ p {
   }
 }
 
+.margin-bottom {
+  margin-bottom: 3rem;
+}
 
 /* utilities */
 .paid {

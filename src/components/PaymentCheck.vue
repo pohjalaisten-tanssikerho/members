@@ -1,6 +1,6 @@
 <template>
 
-  <div v-if="prices" :prices="prices">
+  <div class="margin-bottom" v-if="prices" :prices="prices">
 
     <nav class="nav-secondary">
       <a href="" @click.prevent="$emit('togglemodal', 'non-paid-mails')">Ei maksaneiden sähköpostit</a>
@@ -20,17 +20,22 @@
 
       <div class="fullname">{{ member.lname }}, {{ member.fname }} </div> 
       <div class="discount">{{ discounts(member.membership[0]) }}</div>
+
       <div class="course" :class="{ marginBottom : index, unpaid : !course.paid }" v-for="(course, index) in member.courses" :key="index">
       <button @click="$emit('toggle-paid', course.courseId, member.id, course)" v-if="course.paid">poista maksu</button>
-        <button @click="$emit('toggle-paid', course.courseId, member.id, course)" v-else>merkitse maksu</button>
-        <div class="left-padding">{{ payment(member.membership[0], course, 'price')}}</div>
-        <div class="left-padding">{{ payment(member.membership[0], course, 'ref')}}</div>
+      <button @click="$emit('toggle-paid', course.courseId, member.id, course)" v-else>merkitse maksu</button>
+      <div class="left-padding">{{ payment(member.membership[0], course, 'price')}}</div>
+      <div class="left-padding">{{ payment(member.membership[0], course, 'ref')}}</div>
 
-        <div class="" v-if="course.courseId == 'alkeetOma'">alkeet omalla parilla</div>
-        <div class="" v-if="course.courseId == 'alkeet'">alkeet</div>
-        <div class="" v-if="course.courseId == 'alkeisjatko'">alkeisjatko</div>
-        <div class="" v-if="course.courseId == 'jatko'">jatko</div>
-        <div class="" v-if="course.courseId == 'kannatus'">kannatusjäsen</div>
+      <div v-if="course.courseId == 'alkeetOma'">alkeet omalla parilla</div>
+      <div v-if="course.courseId == 'alkeet'">alkeet</div>
+      <div v-if="course.courseId == 'alkeisjatko'">alkeisjatko</div>
+      <div v-if="course.courseId == 'jatko'">jatko</div>
+      <div v-if="course.courseId == 'kannatus'">kannatusjäsen</div>
+      <div v-if="course.courseId == 'support'">kannatusjäsen</div>
+
+      <div class="note-icon note-paid" v-if="course.paid">ok</div>
+      <div class="note-icon note-not-paid" v-else>!</div>
 
       </div>
     </div>
@@ -124,7 +129,7 @@ $button-width: 120px;
   grid-template-columns: 180px auto;
   grid-template-rows: auto;
   background: $opacity-half;
-  max-width: 400px;
+  max-width: 500px;
   margin: .2em auto;
   padding: .3em;
   .discount {
@@ -142,7 +147,7 @@ $button-width: 120px;
   .course {
     grid-column: span 2;
     display: grid;
-    grid-template-columns: $button-width 50px 50px auto ; 
+    grid-template-columns: $button-width 50px 50px 170px auto ; 
     padding: 0;
     button {
       border: none;
@@ -154,6 +159,14 @@ $button-width: 120px;
     }
     div {
       padding-left: .8em;
+    }
+    .note-icon {
+      text-align: right;
+      padding-right: .2rem;
+    }
+    .note-not-paid {
+      font-weight: bold;
+      color: $orange;
     }
   }
 }
