@@ -6,7 +6,9 @@
   <div class="item" v-for="(member, index) in courseMembers" :key="index">
     <div class="flex">
       <div class="fullname first-cell">{{ member }}</div> 
-      <div class="day-margin" :class="{ onlyitem : hasOneMember(courseMembers) }" v-for="day in days" :key="day"><div class="checkbox"></div></div>
+      <div class="day-margin" :class="{ onlyitem : hasOneMember(courseMembers) }" v-for="day in days" :key="day">
+        <div class="checkbox"></div>
+      </div>
     </div>
   </div>
   <div class="print-brake"></div>
@@ -31,7 +33,6 @@ export default {
 }
 
 </script>
-
 
 <style lang="scss" scoped>
 
@@ -81,9 +82,6 @@ $opacity-half: rgba(0, 0, 0, 0.47);
 
 .item + .item {
   .day-margin {
-    /* background-color: blue; */
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
     padding-bottom: .3em;
   }
 }
@@ -93,6 +91,5 @@ $opacity-half: rgba(0, 0, 0, 0.47);
   border-bottom-left-radius: 5px;
   padding-bottom: .3em;
 }
-
 
 </style>

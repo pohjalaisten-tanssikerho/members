@@ -15,24 +15,30 @@
     <a href="" class="hide-from-print" @click.prevent="display('AllMembers')">Kaikki jäsenet</a>
     <a href="" class="hide-from-print" @click.prevent="display('PaymentCheck')">Maksujen tarkastus</a>
     <a href="" class="hide-from-print" @click.prevent="display('AttendanceList')">Läsnäololistat</a>
+    <a href="" class="hide-from-print" @click.prevent="display('Statistic')">Statistiikka</a>
   </nav>
   <AllMembers 
-    v-bind:members="members" 
+    :members="members" 
     @remove-member="removeMember" 
     @togglemodal="toggleModal"
     @copy-to-clipboard="copyToClipboard"
     v-if="displays.AllMembers" />
   <PaymentCheck
-    v-bind:members="members" 
+    :members="members" 
     @togglemodal="toggleModal" 
     @copy-to-clipboard="copyToClipboard" 
     @toggle-paid="togglePaid"
     v-if="displays.PaymentCheck"/>
   <AttendanceList 
-    v-bind:members="members"
+    :members="members"
     @togglemodal="toggleModal" 
     @copy-to-clipboard="copyToClipboard" 
     v-if="displays.AttendanceList"/>
+  <Statistic 
+    v-if="displays.Statistic"
+    :members="members"
+    :proptest="proptest"
+  />
 </template>
 
 
@@ -41,6 +47,7 @@ import { db } from './utilities/firebase.js'
 import AllMembers from './components/AllMembers.vue'
 import PaymentCheck from './components/PaymentCheck.vue'
 import AttendanceList from './components/AttendanceList.vue'
+import Statistic from './components/Statistic.vue'
 
 // { fname: 'Greatman', lname: 'Lim', email: 'fname.lname@mahti.com', phone: '044 5200985', courses: [{ courseId: 'jatko', role: 'viejä', paid: true }], membership: [{ student: false, club: false, hyy: '' }] },
 // { fname: 'Tom', lname: 'Hanks', email: 'tom.hanks@mahti.org', phone: '044 0000000', courses: [{ courseId: 'alkeetOma', role: 'viejä', paid: false }, { courseId: 'kannatus', amount: '20', paid: true }], membership: [{ student: true, club: true, hyy: '001' }] },
@@ -50,11 +57,11 @@ import AttendanceList from './components/AttendanceList.vue'
 
 export default {
   name: 'App',
-  components: { AllMembers, PaymentCheck, AttendanceList },
+  components: { AllMembers, PaymentCheck, AttendanceList, Statistic },
   data() {
     return {
       members: new Array(),
-      displays: { AllMembers: true, PaymentCheck: false, AttendanceList: false },
+      displays: { AllMembers: false, PaymentCheck: false, AttendanceList: false, Statistic: true },
       currentCollection: '2020k',
     }  
   },
@@ -93,17 +100,6 @@ export default {
               })
               .then(() => courseElement.paid = courseElement.paid ? false : true)
         })
-
-      // console.log(course)
-
-      // db.collection(this.currentCollection)
-      //   .doc(memberId)
-      //   .update({
-      //       fname: 'Jalasjärvi!'
-      //   })
-      //   .then(() => { console.log('Updated!') })
-      //   .catch(() => console.error('Error, could not update: '), memberId)
-      console.log(courseId, memberId)
     },
     copyToClipboard: function(copyTarget) {
       const textToCopy = document.getElementById(copyTarget)
@@ -130,12 +126,6 @@ export default {
   },
   created() {
     this.fetchFireBase(this.currentCollection)
-    // this.firebaseDoc = db.collection(this.currentCollection).orderBy('lname')
-    // this.firebaseDoc.get().then(querySnapshot => {
-    //     querySnapshot.forEach(doc => {
-    //         this.members.push({...doc.data(), id: doc.id})
-    //     })
-    // })
   }
 }
 </script>
