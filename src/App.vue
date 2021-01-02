@@ -12,10 +12,13 @@
     </ul>
   </nav>
   <nav id="nav-views" class="primary hide-from-print">
-    <a href="" class="hide-from-print" @click.prevent="display('AllMembers')">Kaikki jäsenet</a>
-    <a href="" class="hide-from-print" @click.prevent="display('PaymentCheck')">Maksujen tarkastus</a>
-    <a href="" class="hide-from-print" @click.prevent="display('AttendanceList')">Läsnäololistat</a>
-    <a href="" class="hide-from-print" @click.prevent="display('Statistic')">Statistiikka</a>
+    <ul>
+      <li><a href="" class="hide-from-print" @click.prevent="display('AllMembers')">Kaikki jäsenet</a></li>
+      <li><a href="" class="hide-from-print" @click.prevent="display('PaymentCheck')">Maksujen tarkastus</a></li>
+      <li><a href="" class="hide-from-print" @click.prevent="display('AttendanceList')">Läsnäololistat</a></li>
+      <li><a href="" class="hide-from-print" @click.prevent="display('Statistic')">Paritasapaino</a></li>
+      <li><a href="" class="hide-from-print" @click.prevent="display('Statistic')">Statistiikka</a></li>
+    </ul>
   </nav>
   <AllMembers 
     :members="members" 
@@ -61,7 +64,7 @@ export default {
   data() {
     return {
       members: new Array(),
-      displays: { AllMembers: false, PaymentCheck: false, AttendanceList: false, Statistic: true },
+      displays: { AllMembers: true, PaymentCheck: false, AttendanceList: false, Statistic: false },
       currentCollection: '2020k',
     }  
   },
@@ -204,30 +207,26 @@ p {
 }
 
 #nav-views {
-  display: flex;
-  justify-content: center;
-  margin: 1em;
-  a {
-    background: $tintblue;
-    border: solid 2px $nightblue;
-    padding: 1rem;
-    margin: .7rem;
-    &:visited, &:active, &:link {
+  text-align: left;
+  margin: 0;
+  padding: 1em 0;
+  padding-left: 40px;
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    li {
+      display: inline-block;
+      margin-right: 1rem;
       color: $white;
-      text-decoration: none;
-    }
-    &:hover {
-      border-color: $neonblue;
-    }
-    &:active {
-      border-color: $orange;
-    }
-  }
-  &.secondary {
-    a {
-      background: lightgray;
-      padding: .5em;
-    }
+      text-transform: uppercase;
+      font-size: .9rem;
+      padding-bottom: .3rem;
+      border-bottom: 4px solid $tintblue;
+        &:hover {
+          border-bottom-color: $orange;
+        }
+      }
   }
 }
 
