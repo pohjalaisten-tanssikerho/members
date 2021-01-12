@@ -2,16 +2,13 @@ export class Bar {
   constructor(labels, values) {
     this.labels = labels
     this.values = values
-    console.log(labels)
-    console.log(values)
   }
   get data() {
     return {
       type: 'bar',
       data: {
-        // labels: 'viejät',
         datasets: [
-          { // one line graph
+          { 
             label: this.labels[0],
             data: [this.values[0]],
             backgroundColor: [
@@ -22,7 +19,7 @@ export class Bar {
             ],
             borderWidth: 3
           },
-          { // another bar
+          { 
             label: this.labels[1],
             data: [this.values[1]],
             backgroundColor: [
