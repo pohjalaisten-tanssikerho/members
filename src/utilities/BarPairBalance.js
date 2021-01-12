@@ -1,16 +1,18 @@
 export class Bar {
-  constructor(labels, values) {
-    this.labels = labels
-    this.values = values
+  constructor(leaderAmount, followerAmount, labels) {
+    this.leaders = leaderAmount
+    this.followers = followerAmount
+    this.labels = (labels === undefined) ? ' ' : labels
   }
   get data() {
     return {
       type: 'bar',
       data: {
+        labels: this.labels,
         datasets: [
           { 
-            label: this.labels[0],
-            data: [this.values[0]],
+            label: 'Viejät',
+            data: [this.leaders],
             backgroundColor: [
               'rgba(54,73,93,.5)', 
             ],
@@ -20,8 +22,8 @@ export class Bar {
             borderWidth: 3
           },
           { 
-            label: this.labels[1],
-            data: [this.values[1]],
+            label: 'Seuraajat',
+            data: [this.followers],
             backgroundColor: [
               'rgba(71, 183,132,.5)',
             ],
