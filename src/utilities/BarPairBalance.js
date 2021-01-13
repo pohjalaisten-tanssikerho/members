@@ -11,7 +11,7 @@ export class Bar {
         labels: this.labels,
         datasets: [
           { 
-            label: 'Viejät',
+            label: 'viejät',
             data: [this.leaders],
             backgroundColor: [
               'rgba(54,73,93,.5)', 
@@ -22,7 +22,7 @@ export class Bar {
             borderWidth: 3
           },
           { 
-            label: 'Seuraajat',
+            label: 'seuraajat',
             data: [this.followers],
             backgroundColor: [
               'rgba(71, 183,132,.5)',
