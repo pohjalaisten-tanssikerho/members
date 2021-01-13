@@ -41,6 +41,7 @@ export class Bar {
           yAxes: [{
             ticks: {
               beginAtZero: true,
+              callback: function (value) { if (Number.isInteger(value)) { return value; } },
               padding: 25,
             }
           }]
