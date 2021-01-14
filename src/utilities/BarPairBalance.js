@@ -8,7 +8,6 @@ export class Bar {
     return {
       type: 'bar',
       data: {
-        labels: this.labels,
         datasets: [
           { 
             label: 'viejät',
