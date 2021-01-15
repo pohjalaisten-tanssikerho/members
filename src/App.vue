@@ -60,7 +60,12 @@ import Statistic from './components/Statistic.vue'
 
 export default {
   name: 'App',
-  components: { AllMembers, PaymentCheck, AttendanceList, Statistic },
+  components: { 
+    AllMembers,
+    PaymentCheck, 
+    AttendanceList, 
+    Statistic,
+  },
   data() {
     return {
       members: new Array(),
