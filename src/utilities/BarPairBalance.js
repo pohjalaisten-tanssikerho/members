@@ -36,6 +36,11 @@ export class Bar {
       options: {
         responsive: true,
         lineTension: 1,
+        legend: {
+          labels: {
+            fontColor: '#e9f3ff',
+          },
+        },
         scales: {
           yAxes: [{
             ticks: {
