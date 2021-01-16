@@ -24,7 +24,7 @@
     </div>
     <div class="card grid-span-2">
       <h2>Kurssijakauma</h2>
-      <canvas id="all-courses" height="300"></canvas>
+      <canvas id="all-courses" height="150"></canvas>
     </div>
   </div>
 
@@ -134,6 +134,7 @@ import BarPairBalance from '../utilities/BarPairBalance.js'
 import CourseStatistic from '../utilities/CourseStatistic.js'
 import Pie from '../utilities/Pie.js'
 import StatisticGeneral from './StatisticGeneral.vue'
+import BarAllCourses from '../utilities/BarAllCourses.js'
 import { onMounted, reactive } from 'vue'
 
 export default {
@@ -304,6 +305,13 @@ export default {
       });
     }
 
+    const barAllCourses = new BarAllCourses(
+      (alkeet.leader + alkeet.follower), 
+      (alkeetOma.leader + alkeetOma.follower),
+      (alkeisjatko.leader + alkeisjatko.follower),
+      (jatko.leader + jatko.follower),
+      'all-courses')
+
     onMounted(() => {
 
       const createPairBalance = function(memberData, target) {
@@ -341,6 +349,8 @@ export default {
       createHometownPie(alkeisjatko, 'alkeisjatko-hometown')
       createHometownPie(jatko, 'jatko-hometown')
       createHometownPie(allCourseStatistic, 'all-hometown')
+
+      barAllCourses.draw()
 
     }) 
 
