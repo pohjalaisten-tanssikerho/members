@@ -23,8 +23,12 @@
       <canvas id="all-pair-balance" height="300"></canvas>
     </div>
     <div class="card grid-span-2">
-      <h2>Kurssijakauma</h2>
+      <h2>Kurssijakauma osallistujien mukaan</h2>
       <canvas id="all-courses" height="150"></canvas>
+    </div>
+    <div class="card grid-span-2">
+      <h2>Tuotot euroissa</h2>
+      <canvas id="all-income" height="150"></canvas>
     </div>
   </div>
 
@@ -135,7 +139,7 @@ import CourseStatistic from '../utilities/CourseStatistic.js'
 import Pie from '../utilities/Pie.js'
 import StatisticGeneral from './StatisticGeneral.vue'
 import BarAllCourses from '../utilities/BarAllCourses.js'
-import { onMounted, reactive } from 'vue'
+import { onMounted, reactive, watchEffect, ref } from 'vue'
 
 export default {
   components: { StatisticGeneral },
@@ -171,6 +175,9 @@ export default {
     const jatkoIncome = reactive({ paid: 0, total: 0, }) 
     const allCourseStatisticIncome = reactive({ paid: 0, total: 0, }) 
 
+    let barAllIncome = undefined
+    let isBarAllIncomeLoaded = ref(false)
+
     getPrices().then(prices => {
       props.members.forEach( member => {
         member.courses.forEach( course => {
@@ -205,6 +212,16 @@ export default {
         allCourseStatisticIncome.paid += course.paid
         allCourseStatisticIncome.total += course.total
       })
+
+      barAllIncome = new BarAllCourses(
+        (alkeetIncome.total), 
+        (alkeetOmaIncome.total), 
+        (alkeisjatkoIncome.total), 
+        (jatkoIncome.total), 
+        'all-income')
+
+      isBarAllIncomeLoaded.value = true
+
     })
 
     const addToHomeTown = function (member, course) {
@@ -312,6 +329,9 @@ export default {
       (jatko.leader + jatko.follower),
       'all-courses')
 
+
+    console.log('tuotot: ' + alkeetIncome.total)
+
     onMounted(() => {
 
       const createPairBalance = function(memberData, target) {
@@ -353,6 +373,10 @@ export default {
       barAllCourses.draw()
 
     }) 
+
+    watchEffect(() => {
+      if (isBarAllIncomeLoaded.value) barAllIncome.draw()
+    })
 
     return { 
       allCourseStatistic, 
