@@ -1,6 +1,6 @@
 <template>
   {{ alkeetIncome.paid }}
-  <h1>Kaikki kurssit - {{ allCourseStatistic.follower + allCourseStatistic.leader }}</h1>
+  <h1>Kaikki kurssit</h1>
   <div class="charts">
     <div class="card">
       <h2>Yleistä</h2>
@@ -28,7 +28,7 @@
     </div>
   </div>
 
-  <h1>Alkeet - {{ alkeet.follower + alkeet.leader }}</h1>
+  <h1>Alkeet</h1>
 
   <div class="charts">
     <div class="card">
@@ -53,7 +53,7 @@
     </div>
   </div>
 
-  <h1>Alkeet oman parin kanssa - {{ alkeetOma.follower + alkeetOma.leader }}</h1>
+  <h1>Alkeet oman parin kanssa</h1>
   <div class="charts">
     <div class="card">
       <h2>Yleistä</h2>
@@ -77,7 +77,7 @@
     </div>
   </div>
 
-  <h1>Alkeisjatko - {{ alkeisjatko.follower + alkeisjatko.leader }}</h1>
+  <h1>Alkeisjatko</h1>
   <div class="charts">
     <div class="card">
       <h2>Yleistä</h2>
@@ -101,7 +101,7 @@
     </div>
   </div>
 
-  <h1>Jatko - {{ jatko.follower + jatko.leader }}</h1>
+  <h1>Jatko</h1>
 
   <div class="charts">
     <div class="card">
