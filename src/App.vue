@@ -14,11 +14,11 @@
   </nav>
   <nav id="nav-views" class="primary hide-from-print">
     <ul>
-      <li><a href="" class="hide-from-print" @click.prevent="display('AllMembers')">Kaikki jäsenet</a></li>
-      <li><a href="" class="hide-from-print" @click.prevent="display('PaymentCheck')">Maksujen tarkastus</a></li>
-      <li><a href="" class="hide-from-print" @click.prevent="display('AttendanceList')">Läsnäololistat</a></li>
+      <li :class="{hilight : displays.AllMembers}"><a href="" class="hide-from-print"  @click.prevent="display('AllMembers')">Kaikki jäsenet</a></li>
+      <li :class="{hilight : displays.PaymentCheck}"><a href="" class="hide-from-print" @click.prevent="display('PaymentCheck')">Maksujen tarkastus</a></li>
+      <li :class="{hilight : displays.AttendanceList}"><a href="" class="hide-from-print" @click.prevent="display('AttendanceList')">Läsnäololistat</a></li>
       <!-- <li><a href="" class="hide&#45;from&#45;print" @click.prevent="display('Statistic')">Paritasapaino</a></li> -->
-      <li><a href="" class="hide-from-print" @click.prevent="display('Statistic')">Statistiikka</a></li>
+      <li :class="{hilight : displays.Statistic}"><a href="" class="hide-from-print" @click.prevent="display('Statistic')">Statistiikka</a></li>
     </ul>
   </nav>
   <AllMembers 
@@ -230,10 +230,13 @@ p {
       font-size: .9rem;
       padding-bottom: .3rem;
       border-bottom: 4px solid $tintblue;
-        &:hover {
-          border-bottom-color: $orange;
-        }
+      &:hover {
+        border-bottom-color: $orange;
       }
+      &.hilight {
+        border-bottom-color: $orange;
+      }
+    }
   }
 }
 
