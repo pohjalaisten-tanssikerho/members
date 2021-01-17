@@ -1,13 +1,14 @@
 <template>
   <nav id="nav-main">
     <ul>
-      <li>analyysi</li>
+      <!-- <li>Analyysi</li> -->
+      <li></li>
       <li>
         <span>jäsenrekisteri:</span>
         <span><a href="#">2020k</a></span>
-        <span><a href="#">2020s</a></span>
-        <span><a href="#">2021s</a></span>
-        <span><a href="#">2021k</a></span>
+        <!-- <span><a href="#">2020s</a></span> -->
+        <!-- <span><a href="#">2021s</a></span> -->
+        <!-- <span><a href="#">2021k</a></span> -->
       </li>
     </ul>
   </nav>
@@ -16,7 +17,7 @@
       <li><a href="" class="hide-from-print" @click.prevent="display('AllMembers')">Kaikki jäsenet</a></li>
       <li><a href="" class="hide-from-print" @click.prevent="display('PaymentCheck')">Maksujen tarkastus</a></li>
       <li><a href="" class="hide-from-print" @click.prevent="display('AttendanceList')">Läsnäololistat</a></li>
-      <li><a href="" class="hide-from-print" @click.prevent="display('Statistic')">Paritasapaino</a></li>
+      <!-- <li><a href="" class="hide&#45;from&#45;print" @click.prevent="display('Statistic')">Paritasapaino</a></li> -->
       <li><a href="" class="hide-from-print" @click.prevent="display('Statistic')">Statistiikka</a></li>
     </ul>
   </nav>
@@ -194,6 +195,7 @@ p {
         margin-left: .7rem;
         padding-bottom: .3rem;
         border-bottom: solid 4px $tintblue;
+        border-bottom-color: $orange;
         &:first-of-type {
           border-bottom: solid 4px $blue;
         }
