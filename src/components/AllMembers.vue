@@ -35,7 +35,7 @@
             <h6>Alennusoikeus</h6>
             <ul>
               <li v-if="member.membership[0].student">opiskelija</li>
-              <li v-if="member.membership[0].hyy.length > 0">{{ member.membership[0].hyy }}</li>
+              <!-- <li v&#45;if="member.membership[0].hyy.length > 0">{{ member.membership[0].hyy }}</li> -->
               <li v-if="member.membership[0].club">osakuntalainen</li>
             </ul>
           </section>
@@ -51,10 +51,10 @@ export default {
   name: 'AllMembers',
   data() {
     return {
-      allmails: ''
+      allmails: '',
     }
   },
-  props: ['members', 'firemembers'],
+  props: ['members'],
   emits: ['removeMember', 'togglemodal', 'copyToClipboard'],
   methods: {
     showMore: function(memberId) {
