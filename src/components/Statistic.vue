@@ -328,9 +328,6 @@ export default {
       (jatko.leader + jatko.follower),
       'all-courses')
 
-
-    console.log('tuotot: ' + alkeetIncome.total)
-
     onMounted(() => {
 
       const createPairBalance = function(memberData, target) {
