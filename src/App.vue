@@ -73,14 +73,22 @@ export default {
   },
   methods: {
     removeMember: function(memberView, fireId) {
-      db.collection(this.currentCollection)
-        .doc(fireId)
-        .delete()
-        .then(() => { 
-          this.members = new Array()
-          this.fetchFireBase(this.currentCollection)
-        })
-        .catch(() => { 'Failed to removing document: ', fireId })
+      if (this.demo) {
+        // document.getElementById(memberView.email).classList.add('hidden')
+        this.members = this.members.filter( (obj) => { return  obj.email !== memberView.email })
+        console.log('We are in demo')
+        console.log('memberView: ' + memberView.email)
+      } 
+      else {
+        db.collection(this.currentCollection)
+          .doc(fireId)
+          .delete()
+          .then(() => { 
+            this.members = new Array()
+            this.fetchFireBase(this.currentCollection)
+          })
+          .catch(() => { 'Failed to removing document: ', fireId })
+      }
     },
     display: function(target) {
       Object.keys(this.displays).forEach(k => this.displays[k] = false);

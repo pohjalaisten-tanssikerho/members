@@ -12,7 +12,7 @@
         <textarea id="copyToClipboard" :value="allmails" readonly></textarea>
       </div>
     </div>
-    <div class="item" v-for="member in members" :key="member.email" :bind="members">
+    <div class="item" :id="member.email" v-for="member in members" :key="member.email">
       <div class="fullname">{{ member.lname }}, {{ member.fname }} </div> 
       <div class="email">{{member.email}}</div>
       <div>{{ member.hometown }}</div>
@@ -146,6 +146,5 @@ $opacity-half: rgba(0, 0, 0, 0.47);
     }
   }
 }
-
 
 </style>
