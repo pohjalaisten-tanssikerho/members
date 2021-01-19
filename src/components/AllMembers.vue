@@ -12,7 +12,7 @@
         <textarea id="copyToClipboard" :value="allmails" readonly></textarea>
       </div>
     </div>
-    <div class="item" :id="member.email" v-for="member in members" :key="member.email">
+    <div class="item" :id="member.email + 'toggle'" v-for="member in members" :key="member.email">
       <div class="fullname">{{ member.lname }}, {{ member.fname }} </div> 
       <div class="email">{{member.email}}</div>
       <div>{{ member.hometown }}</div>
@@ -60,6 +60,7 @@ export default {
     showMore: function(memberId) {
       const member = document.getElementById(memberId)
       member.classList.toggle('hidden')
+      console.log('showMore clicked')
     },
     populateMails: function() {
       this.allmails = ''
