@@ -1,5 +1,4 @@
 <template>
-  {{ alkeetIncome.paid }}
   <h1>Kaikki kurssit</h1>
   <div class="charts">
     <div class="card">
