@@ -95,22 +95,27 @@ export default {
       document.getElementById(modal).classList.toggle('hidden')
     },
     togglePaid: function(courseId, memberId, courseElement) {
-      const courses = new Array()
-      db.collection(this.currentCollection)
-        .doc(memberId)
-        .get()
-        .then(doc => {
+      if (this.demo) {
+        courseElement.paid = !courseElement.paid
+      }
+      else {
+        const courses = new Array()
+        db.collection(this.currentCollection)
+          .doc(memberId)
+          .get()
+          .then(doc => {
             courses.push( ...doc.data().courses )
             courses.forEach(course => {
-                if (course.courseId === courseId) { course.paid = !(course.paid)}
+              if (course.courseId === courseId) { course.paid = !(course.paid)}
             }) 
             db.collection(this.currentCollection)
               .doc(memberId)
               .update({
-                  courses: courses
+                courses: courses
               })
               .then(() => courseElement.paid = courseElement.paid ? false : true)
-        })
+          })
+      }
     },
     copyToClipboard: function(copyTarget) {
       const textToCopy = document.getElementById(copyTarget)
