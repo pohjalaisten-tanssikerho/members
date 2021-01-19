@@ -53,7 +53,7 @@ import AllMembers from './components/AllMembers.vue'
 import PaymentCheck from './components/PaymentCheck.vue'
 import AttendanceList from './components/AttendanceList.vue'
 import Statistic from './components/Statistic.vue'
-import demoData from './tests/demoData.js'
+import demoMembers from './tests/demoMembers.js'
 
 export default {
   name: 'App',
@@ -132,7 +132,7 @@ export default {
   },
   created() {
     if (this.demo) {
-      this.members = demoData
+      this.members = demoMembers
     }
     else this.fetchFireBase(this.currentCollection)
   }

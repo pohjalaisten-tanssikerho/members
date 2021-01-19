@@ -90,7 +90,7 @@ $opacity-half: rgba(0, 0, 0, 0.47);
 
 .item {
   display: grid;
-  grid-template-columns: 180px 230px 100px auto 85px 85px;
+  grid-template-columns: 200px 270px 100px auto 95px 95px;
   grid-template-rows: repeat(2, auto);
   background: $opacity-half;
   max-width: 850px;
@@ -115,7 +115,7 @@ $opacity-half: rgba(0, 0, 0, 0.47);
   button {
     color: $white;
     border: none;
-    width: 80px;
+    width: 90px;
     border: solid 1px $tintblue;
     outline: none;
     margin-right: 100px;

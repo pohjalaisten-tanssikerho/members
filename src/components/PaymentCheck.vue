@@ -121,11 +121,11 @@ $nightblue: #022140;
 $tintblue: #05386b;
 $opacity-half: rgba(0, 0, 0, 0.47);
 
-$button-width: 120px;
+$button-width: 130px;
 
 .item {
   display: grid;
-  grid-template-columns: 180px auto;
+  grid-template-columns: 220px auto;
   grid-template-rows: auto;
   background: $opacity-half;
   max-width: 500px;
