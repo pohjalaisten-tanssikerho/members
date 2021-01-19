@@ -5,7 +5,8 @@
       <li></li>
       <li>
         <span>jäsenrekisteri:</span>
-        <span><a href="#">2020k</a></span>
+        <span v-if="{demo}">demo</span>
+        <span v-else><a href="#">2020k</a></span>
         <!-- <span><a href="#">2020s</a></span> -->
         <!-- <span><a href="#">2021s</a></span> -->
         <!-- <span><a href="#">2021k</a></span> -->
