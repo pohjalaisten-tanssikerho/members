@@ -1,49 +1,63 @@
 <template>
-  <nav id="nav-main">
-    <ul>
-      <!-- <li>Analyysi</li> -->
-      <li></li>
-      <li>
-        <span>jäsenrekisteri:</span>
-        <span v-if="{demo}">demo</span>
+  <div v-if="isLogged">
+    <nav id="nav-main">
+      <ul>
+        <!-- <li>Analyysi</li> -->
+        <li></li>
+        <li class="list-header"> jäsenrekisteri: </li>
+        <li v-if="demo">demo</li>
         <span v-else><a href="#">2020k</a></span>
-        <!-- <span><a href="#">2020s</a></span> -->
-        <!-- <span><a href="#">2021s</a></span> -->
-        <!-- <span><a href="#">2021k</a></span> -->
-      </li>
-    </ul>
-  </nav>
-  <nav id="nav-views" class="primary hide-from-print">
-    <ul>
-      <li :class="{hilight : displays.AllMembers}"><a href="" class="hide-from-print"  @click.prevent="display('AllMembers')">Kaikki jäsenet</a></li>
-      <li :class="{hilight : displays.PaymentCheck}"><a href="" class="hide-from-print" @click.prevent="display('PaymentCheck')">Maksujen tarkastus</a></li>
-      <li :class="{hilight : displays.AttendanceList}"><a href="" class="hide-from-print" @click.prevent="display('AttendanceList')">Läsnäololistat</a></li>
-      <!-- <li><a href="" class="hide&#45;from&#45;print" @click.prevent="display('Statistic')">Paritasapaino</a></li> -->
-      <li :class="{hilight : displays.Statistic}"><a href="" class="hide-from-print" @click.prevent="display('Statistic')">Statistiikka</a></li>
-    </ul>
-  </nav>
-  <AllMembers 
-    :members="members" 
-    @remove-member="removeMember" 
-    @togglemodal="toggleModal"
-    @copy-to-clipboard="copyToClipboard"
-    v-if="displays.AllMembers" />
-  <PaymentCheck
-    :members="members" 
-    @togglemodal="toggleModal" 
-    @copy-to-clipboard="copyToClipboard" 
-    @toggle-paid="togglePaid"
-    v-if="displays.PaymentCheck"/>
-  <AttendanceList 
-    :members="members"
-    @togglemodal="toggleModal" 
-    @copy-to-clipboard="copyToClipboard" 
-    v-if="displays.AttendanceList"/>
-  <Statistic 
-    v-if="displays.Statistic"
-    :members="members"
-    :proptest="proptest"
-  />
+          <!-- <span><a href="#">2020s</a></span> -->
+          <!-- <span><a href="#">2021s</a></span> -->
+          <!-- <span><a href="#">2021k</a></span> -->
+      </ul>
+      <ul class="nav-align-right">
+        <li class="unhilight"><a href="/" @click.prevent="logout">Kirjaudu ulos</a></li>
+      </ul>
+    </nav>
+    <nav id="nav-views" class="primary hide-from-print">
+      <ul>
+        <li :class="{hilight : displays.AllMembers}"><a href="" class="hide-from-print"  @click.prevent="display('AllMembers')">Kaikki jäsenet</a></li>
+        <li :class="{hilight : displays.PaymentCheck}"><a href="" class="hide-from-print" @click.prevent="display('PaymentCheck')">Maksujen tarkastus</a></li>
+        <li :class="{hilight : displays.AttendanceList}"><a href="" class="hide-from-print" @click.prevent="display('AttendanceList')">Läsnäololistat</a></li>
+        <!-- <li><a href="" class="hide&#45;from&#45;print" @click.prevent="display('Statistic')">Paritasapaino</a></li> -->
+        <li :class="{hilight : displays.Statistic}"><a href="" class="hide-from-print" @click.prevent="display('Statistic')">Statistiikka</a></li>
+      </ul>
+    </nav>
+    <AllMembers 
+      :members="members" 
+      @remove-member="removeMember" 
+      @togglemodal="toggleModal"
+      @copy-to-clipboard="copyToClipboard"
+      v-if="displays.AllMembers" />
+    <PaymentCheck
+      :members="members" 
+      @togglemodal="toggleModal" 
+      @copy-to-clipboard="copyToClipboard" 
+      @toggle-paid="togglePaid"
+      v-if="displays.PaymentCheck"/>
+    <AttendanceList 
+      :members="members"
+      @togglemodal="toggleModal" 
+      @copy-to-clipboard="copyToClipboard" 
+      v-if="displays.AttendanceList"/>
+    <Statistic 
+      v-if="displays.Statistic"
+      :members="members"
+      :proptest="proptest"
+    />
+  </div>
+  <div id="login-wrapper" v-else>
+    <div id="login-form">
+      <h1>POT Jäsenrekisteri</h1>
+      <p>Tervetuloa Pohjalaisten tanssikerhon jäsenrekisterin hallintasivulle. Ole hyvä ja kirjaudu. Halutessasi voit tutustua järjestelmään <a href="/" @click.prevent="logInAsDemo">kirjautumalla demo-käyttäjänä</a>.</p>
+      <form action="" prevent>
+        <label for="password">Salasana:</label>
+        <input type="password" name="password">
+        <button>Kirjaudu</button>
+      </form>
+    </div>
+  </div>
 </template>
 
 
@@ -68,7 +82,8 @@ export default {
       members: new Array(),
       displays: { AllMembers: true, PaymentCheck: false, AttendanceList: false, Statistic: false },
       currentCollection: '2020k',
-      demo: true,
+      demo: false,
+      isLogged: false,
     }  
   },
   methods: {
@@ -135,16 +150,25 @@ export default {
               this.members.push({ ...doc.data(), id: doc.id })
             })
         })
+    },
+    logInAsDemo: function() {
+      this.demo = true
+      this.isLogged = true
+      this.members = demoMembers
+    },
+    logout: function() {
+      this.demo = false
+      this.isLogged = false
     }
   },
   mounted: function() {
     this.members.sort((a, b) => (a.lname > b.lname) ? 1 : -1)
   },
   created() {
-    if (this.demo) {
-      this.members = demoMembers
-    }
-    else this.fetchFireBase(this.currentCollection)
+    // if (this.demo) {
+    //   this.members = demoMembers
+    // }
+    // else this.fetchFireBase(this.currentCollection)
   }
 }
 </script>
@@ -182,9 +206,56 @@ p {
   text-align: center;
   color: #2c3e50;
   margin: 0;
+  margin-bottom: 1em;
+}
+
+#login-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  height: 100vh;
+  justify-items: center;
+  align-items: center;
+  #login-form {
+    background: $opacity-half;
+    width: 400px;
+    height: 200px;
+    border: 2px solid $tintblue;
+    border-radius: .5em;
+    padding: 1em;
+    form {
+      text-align: left;
+      button {
+        margin: 1em;
+        margin-left: 0;
+        text-align: right;
+      }
+      label {
+        padding-right: 1em;
+        color: $white;
+      }
+      input {
+        width: 280px;
+      }
+    }
+    p {
+      text-align: left;
+    }
+    h1 {
+      color: $white
+    }
+    a {
+      color: $neonblue;
+      &:hover {
+        color: $orange;
+      }
+    }
+  }
 }
 
 #nav-main {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   border: 3px solid $tintblue;
   border-left: none;
   border-right: none;
@@ -201,25 +272,39 @@ p {
       text-transform: uppercase;
       font-size: .9rem;
       padding-bottom: .3rem;
-      span {
-        margin-left: .7rem;
-        padding-bottom: .3rem;
+      border-bottom: solid 4px $orange;
+      /* span { */
+      /*   margin-left: .7rem; */
+      /*   padding-bottom: .3rem; */
+      /*   border-bottom: solid 4px $tintblue; */
+      /*   border-bottom-color: $orange; */
+      /*   &:first-of-type { */
+      /*     border-bottom: solid 4px $blue; */
+      /*   } */
+      /*   &:hover:not(:first-of-type) { */
+      /*     border-bottom-color: $orange; */
+      /*   } */
+      /* } */
+      /* &:first-of-type { */
+      /*   border-bottom: solid 4px $tintblue; */
+      /*   &:hover { */
+      /*     border-bottom-color: $orange; */
+      /*   } */
+      /* } */
+      &.list-header {
         border-bottom: solid 4px $tintblue;
-        border-bottom-color: $orange;
-        &:first-of-type {
-          border-bottom: solid 4px $blue;
-        }
-        &:hover:not(:first-of-type) {
-          border-bottom-color: $orange;
-        }
+        border-bottom-color: $tintblue;
       }
-      &:first-of-type {
-        border-bottom: solid 4px $tintblue;
+      &.unhilight {
+        border-bottom-color: $tintblue;
         &:hover {
           border-bottom-color: $orange;
         }
       }
     }
+  }
+  ul.nav-align-right {
+    text-align: right;
   }
 }
 
