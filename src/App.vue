@@ -160,10 +160,11 @@ export default {
     logout: function() {
       auth
         .signOut()
-        .then(() => console.log('Sign out'))
+        .then(() => {
+          this.demo = false
+          this.isLogged = false
+        })
         .catch(e => console.warn('Error in signout: ' + e))
-      this.demo = false
-      this.isLogged = false
     },
     login: function() {
       auth.signInWithEmailAndPassword('pohjalaistentanssikerho.ry@gmail.com', this.password)
