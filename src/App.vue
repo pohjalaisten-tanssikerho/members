@@ -50,7 +50,7 @@
     <div id="login-form">
       <h1>POT Jäsenrekisteri</h1>
       <p>Tervetuloa Pohjalaisten tanssikerhon jäsenrekisterin hallintasivulle. Ole hyvä ja kirjaudu. Halutessasi voit tutustua järjestelmään <a href="/" @click.prevent="loginAsDemo">kirjautumalla demo-käyttäjänä</a>.</p>
-      <form action="" @submit.prevent="login">
+      <form @submit.prevent="login">
         <label for="password">Salasana:</label>
         <input type="password" name="password" v-model="password">
         <button>Kirjaudu</button>
@@ -141,7 +141,6 @@ export default {
       document.getElementById('copyMessage').classList.remove('hidden')
     },
     fetchFireBase: function(collection) {
-      this.members = new Array()
       db.collection(collection)
         .orderBy('lname')
         .get()
@@ -161,7 +160,6 @@ export default {
         .then(() => {
           this.password = ''
           this.currentCollection = '2020k'
-          this.fetchFireBase(this.currentCollection)
         })
         .catch(err => {
           console.warn('Error login: ' + err)
@@ -174,6 +172,8 @@ export default {
           this.isLogged = false
           this.authUser = {}
           this.display('AllMembers')
+          this.members = new Array()
+          this.currentCollection = ''
         })
         .catch(e => console.warn('Error when signout: ' + e))
     },
