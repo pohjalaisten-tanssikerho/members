@@ -5,7 +5,7 @@
         <!-- <li>Analyysi</li> -->
         <li></li>
         <li class="list-header"> jäsenrekisteri: </li>
-        <li v-if="demo">demo</li>
+        <li v-if="currentCollection == 'demo'">demo</li>
         <span v-else><a href="#">2020k</a></span>
           <!-- <span><a href="#">2020s</a></span> -->
           <!-- <span><a href="#">2021s</a></span> -->
@@ -20,7 +20,6 @@
         <li :class="{hilight : displays.AllMembers}"><a href="" class="hide-from-print"  @click.prevent="display('AllMembers')">Kaikki jäsenet</a></li>
         <li :class="{hilight : displays.PaymentCheck}"><a href="" class="hide-from-print" @click.prevent="display('PaymentCheck')">Maksujen tarkastus</a></li>
         <li :class="{hilight : displays.AttendanceList}"><a href="" class="hide-from-print" @click.prevent="display('AttendanceList')">Läsnäololistat</a></li>
-        <!-- <li><a href="" class="hide&#45;from&#45;print" @click.prevent="display('Statistic')">Paritasapaino</a></li> -->
         <li :class="{hilight : displays.Statistic}"><a href="" class="hide-from-print" @click.prevent="display('Statistic')">Statistiikka</a></li>
       </ul>
     </nav>
@@ -81,8 +80,7 @@ export default {
     return {
       members: new Array(),
       displays: { AllMembers: true, PaymentCheck: false, AttendanceList: false, Statistic: false },
-      currentCollection: '2020k',
-      demo: false,
+      currentCollection: '',
       isLogged: undefined,
       authUser: {},
       password: '',
@@ -90,8 +88,8 @@ export default {
   },
   methods: {
     removeMember: function(memberView, fireId) {
-      if (this.demo) {
-        this.members = this.members.filter( (obj) => { return  obj.email !== memberView.email })
+      if (this.currentCollection === 'demo') {
+        this.members = this.members.filter( obj => { return obj.email !== memberView.email })
       } 
       else {
         db.collection(this.currentCollection)
@@ -112,7 +110,7 @@ export default {
       document.getElementById(modal).classList.toggle('hidden')
     },
     togglePaid: function(courseId, memberId, courseElement) {
-      if (this.demo) {
+      if (this.currentCollection === 'demo') {
         courseElement.paid = !courseElement.paid
       }
       else {
@@ -143,6 +141,7 @@ export default {
       document.getElementById('copyMessage').classList.remove('hidden')
     },
     fetchFireBase: function(collection) {
+      this.members = new Array()
       db.collection(collection)
         .orderBy('lname')
         .get()
@@ -153,33 +152,30 @@ export default {
         })
     },
     loginAsDemo: function() {
-      this.demo = true
       this.isLogged = true
       this.members = demoMembers
-    },
-    logout: function() {
-      auth
-        .signOut()
-        .then(() => {
-          this.demo = false
-          this.isLogged = false
-        })
-        .catch(e => console.warn('Error in signout: ' + e))
+      this.currentCollection = 'demo'
     },
     login: function() {
       auth.signInWithEmailAndPassword('pohjalaistentanssikerho.ry@gmail.com', this.password)
         .then(() => {
           this.password = ''
+          this.currentCollection = '2020k'
+          this.fetchFireBase(this.currentCollection)
         })
         .catch(err => {
           console.warn('Error login: ' + err)
         })
     },
-    getLogged: function() {
-      // auth.onAuthStateChanged( user => {
-        // this.isLogged = user ? true : false
-        // return user ? true : false
-      // })
+    logout: function() {
+      auth
+        .signOut()
+        .then(() => {
+          this.isLogged = false
+          this.authUser = {}
+          this.display('AllMembers')
+        })
+        .catch(e => console.warn('Error when signout: ' + e))
     },
   },
   mounted: function() {
@@ -189,6 +185,8 @@ export default {
       if(user) {
         this.isLogged = true
         this.authUser = user
+        this.currentCollection = '2020k'
+        this.fetchFireBase(this.currentCollection)
       } else {
         this.isLogged = false
         this.authUser = {}
