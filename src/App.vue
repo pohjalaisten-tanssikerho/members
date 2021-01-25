@@ -1,15 +1,16 @@
 <template>
   <div v-if="isLogged">
     <nav id="nav-main">
-      <ul>
+      <ul v-if="currentCollection === 'demo'">
         <!-- <li>Analyysi</li> -->
         <li></li>
         <li class="list-header"> jäsenrekisteri: </li>
-        <li v-if="currentCollection == 'demo'">demo</li>
-        <span v-else><a href="#">2020k</a></span>
-          <!-- <span><a href="#">2020s</a></span> -->
-          <!-- <span><a href="#">2021s</a></span> -->
-          <!-- <span><a href="#">2021k</a></span> -->
+        <li>demo</li>
+      </ul>
+      <ul v-else>
+        <!-- <li>Analyysi</li> -->
+        <li class="list-header"> jäsenrekisteri: </li>
+        <li>2020k</li>
       </ul>
       <ul class="nav-align-right">
         <li class="unhilight"><a href="/" @click.prevent="logout">Kirjaudu ulos</a></li>
