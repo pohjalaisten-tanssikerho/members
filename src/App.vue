@@ -50,10 +50,10 @@
   <div id="login-wrapper" v-else>
     <div id="login-form">
       <h1>POT Jäsenrekisteri</h1>
-      <p>Tervetuloa Pohjalaisten tanssikerhon jäsenrekisterin hallintasivulle. Ole hyvä ja kirjaudu. Halutessasi voit tutustua järjestelmään <a href="/" @click.prevent="logInAsDemo">kirjautumalla demo-käyttäjänä</a>.</p>
-      <form action="" prevent>
+      <p>Tervetuloa Pohjalaisten tanssikerhon jäsenrekisterin hallintasivulle. Ole hyvä ja kirjaudu. Halutessasi voit tutustua järjestelmään <a href="/" @click.prevent="loginAsDemo">kirjautumalla demo-käyttäjänä</a>.</p>
+      <form action="" @submit.prevent="login">
         <label for="password">Salasana:</label>
-        <input type="password" name="password">
+        <input type="password" name="password" v-model="password">
         <button>Kirjaudu</button>
       </form>
     </div>
@@ -62,7 +62,7 @@
 
 
 <script>
-import { db } from './utilities/firebase.js'
+import { db, auth } from './utilities/firebase.js'
 import AllMembers from './components/AllMembers.vue'
 import PaymentCheck from './components/PaymentCheck.vue'
 import AttendanceList from './components/AttendanceList.vue'
@@ -83,7 +83,9 @@ export default {
       displays: { AllMembers: true, PaymentCheck: false, AttendanceList: false, Statistic: false },
       currentCollection: '2020k',
       demo: false,
-      isLogged: false,
+      isLogged: undefined,
+      authUser: {},
+      password: '',
     }  
   },
   methods: {
@@ -141,7 +143,6 @@ export default {
       document.getElementById('copyMessage').classList.remove('hidden')
     },
     fetchFireBase: function(collection) {
-      console.log(collection)
       db.collection(collection)
         .orderBy('lname')
         .get()
@@ -151,26 +152,51 @@ export default {
             })
         })
     },
-    logInAsDemo: function() {
+    loginAsDemo: function() {
       this.demo = true
       this.isLogged = true
       this.members = demoMembers
     },
     logout: function() {
+      auth
+        .signOut()
+        .then(() => console.log('Sign out'))
+        .catch(e => console.warn('Error in signout: ' + e))
       this.demo = false
       this.isLogged = false
-    }
+    },
+    login: function() {
+      auth.signInWithEmailAndPassword('pohjalaistentanssikerho.ry@gmail.com', this.password)
+        .then(() => {
+          this.password = ''
+        })
+        .catch(err => {
+          console.warn('Error login: ' + err)
+        })
+    },
+    getLogged: function() {
+      // auth.onAuthStateChanged( user => {
+        // this.isLogged = user ? true : false
+        // return user ? true : false
+      // })
+    },
   },
   mounted: function() {
     this.members.sort((a, b) => (a.lname > b.lname) ? 1 : -1)
+
+    auth.onAuthStateChanged( user => {
+      if(user) {
+        this.isLogged = true
+        this.authUser = user
+      } else {
+        this.isLogged = false
+        this.authUser = {}
+      }
+    })
+
   },
-  created() {
-    // if (this.demo) {
-    //   this.members = demoMembers
-    // }
-    // else this.fetchFireBase(this.currentCollection)
-  }
 }
+
 </script>
 
 <style lang="scss">
