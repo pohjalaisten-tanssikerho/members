@@ -96,10 +96,6 @@ export default {
         db.collection(this.currentCollection)
           .doc(fireId)
           .delete()
-          .then(() => { 
-            this.members = new Array()
-            this.fetchFireBase(this.currentCollection)
-          })
           .catch(() => { 'Failed to removing document: ', fireId })
       }
     },
@@ -141,14 +137,14 @@ export default {
       else if (document.selection) {document.selection.empty()}
       document.getElementById('copyMessage').classList.remove('hidden')
     },
-    fetchFireBase: function(collection) {
+    fetchFireBase: function(collection, members) {
       db.collection(collection)
         .orderBy('lname')
-        .get()
-        .then(querySnapshot => {
-            querySnapshot.forEach(doc => {
-              this.members.push({ ...doc.data(), id: doc.id })
-            })
+        .onSnapshot((querySnapshot) => {
+          members.length = 0
+          querySnapshot.forEach( doc => {
+            members.push({ ...doc.data(), id: doc.id })
+          })
         })
     },
     loginAsDemo: function() {
@@ -187,7 +183,7 @@ export default {
         this.isLogged = true
         this.authUser = user
         this.currentCollection = '2020k'
-        this.fetchFireBase(this.currentCollection)
+        this.fetchFireBase(this.currentCollection, this.members)
       } else {
         this.isLogged = false
         this.authUser = {}
