@@ -197,15 +197,6 @@ export default {
 
 <style lang="scss">
 
-$white: #e9f3ff;
-$orange: #fb9039;
-$blue: #062f4f;
-$lightblue: #0b3c5d;
-$neonblue: #009fff;
-$nightblue: #022140;
-$tintblue: #05386b;
-$opacity-half: rgba(0, 0, 0, 0.47);
-
 body {
   margin: 0;
   background-image: url("https://raw.githubusercontent.com/pohjalaisten-tanssikerho/web-page/master/static/img/bg.jpg");
