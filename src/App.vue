@@ -10,10 +10,12 @@
       <ul v-else>
         <!-- <li>Analyysi</li> -->
         <li class="list-header"> jäsenrekisteri: </li>
-        <li>2020k</li>
+        <li :class="{ hilight : season.selected }" v-for="season in seasons" :key="season.season">
+          <a href="#" @click.prevent="changeCollection(season)">{{ season.season }}</a>
+        </li>
       </ul>
       <ul class="nav-align-right">
-        <li class="unhilight"><a href="/" @click.prevent="logout">Kirjaudu ulos</a></li>
+        <li class=""><a href="/" @click.prevent="logout">Kirjaudu ulos</a></li>
       </ul>
     </nav>
     <nav id="nav-views" class="primary hide-from-print">
@@ -85,6 +87,11 @@ export default {
       isLogged: undefined,
       authUser: {},
       password: '',
+      seasons: [ 
+        { season: '2021k', selected: true, },
+        { season: '2020s', selected: false, },
+        { season: '2020k', selected: false, }
+      ],
     }  
   },
   methods: {
@@ -174,6 +181,20 @@ export default {
         })
         .catch(e => console.warn('Error when signout: ' + e))
     },
+    changeCollection: function(season) {
+      this.currentCollection = season.season
+      this.seasons.forEach(season => season.selected = false)
+      season.selected = true
+      this.fetchFireBase(this.currentCollection, this.members)
+    },
+  },
+  computed: {
+    currentSeason: function() {
+      const currentMonth = new Date().getMonth()
+      const currentYear = new Date().getFullYear()
+      const season = currentMonth < 6 ? 'k' : 's'
+      return currentYear + season
+    },
   },
   mounted: function() {
     this.members.sort((a, b) => (a.lname > b.lname) ? 1 : -1)
@@ -182,7 +203,7 @@ export default {
       if(user) {
         this.isLogged = true
         this.authUser = user
-        this.currentCollection = '2020k'
+        this.currentCollection = this.currentSeason 
         this.fetchFireBase(this.currentCollection, this.members)
       } else {
         this.isLogged = false
@@ -285,34 +306,16 @@ p {
       text-transform: uppercase;
       font-size: .9rem;
       padding-bottom: .3rem;
-      border-bottom: solid 4px $orange;
-      /* span { */
-      /*   margin-left: .7rem; */
-      /*   padding-bottom: .3rem; */
-      /*   border-bottom: solid 4px $tintblue; */
-      /*   border-bottom-color: $orange; */
-      /*   &:first-of-type { */
-      /*     border-bottom: solid 4px $blue; */
-      /*   } */
-      /*   &:hover:not(:first-of-type) { */
-      /*     border-bottom-color: $orange; */
-      /*   } */
-      /* } */
-      /* &:first-of-type { */
-      /*   border-bottom: solid 4px $tintblue; */
-      /*   &:hover { */
-      /*     border-bottom-color: $orange; */
-      /*   } */
-      /* } */
+      border-bottom: solid 4px $tintblue;
+      &:hover {
+        border-bottom-color: $orange;
+      }
       &.list-header {
         border-bottom: solid 4px $tintblue;
         border-bottom-color: $tintblue;
       }
-      &.unhilight {
-        border-bottom-color: $tintblue;
-        &:hover {
-          border-bottom-color: $orange;
-        }
+      &.hilight {
+        border-bottom-color: $orange;
       }
     }
   }
