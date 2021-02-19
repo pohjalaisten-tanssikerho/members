@@ -18,36 +18,38 @@
         <li class=""><a href="/" @click.prevent="logout">Kirjaudu ulos</a></li>
       </ul>
     </nav>
-    <nav id="nav-views" class="primary hide-from-print">
-      <ul>
-        <li :class="{hilight : displays.AllMembers}"><a href="" class="hide-from-print"  @click.prevent="display('AllMembers')">Kaikki jäsenet</a></li>
-        <li :class="{hilight : displays.PaymentCheck}"><a href="" class="hide-from-print" @click.prevent="display('PaymentCheck')">Maksujen tarkastus</a></li>
-        <li :class="{hilight : displays.AttendanceList}"><a href="" class="hide-from-print" @click.prevent="display('AttendanceList')">Läsnäololistat</a></li>
-        <li :class="{hilight : displays.Statistic}"><a href="" class="hide-from-print" @click.prevent="display('Statistic')">Statistiikka</a></li>
-      </ul>
-    </nav>
-    <AllMembers 
-      :members="members" 
-      @remove-member="removeMember" 
-      @togglemodal="toggleModal"
-      @copy-to-clipboard="copyToClipboard"
-      v-if="displays.AllMembers" />
-    <PaymentCheck
-      :members="members" 
-      @togglemodal="toggleModal" 
-      @copy-to-clipboard="copyToClipboard" 
-      @toggle-paid="togglePaid"
-      v-if="displays.PaymentCheck"/>
-    <AttendanceList 
-      :members="members"
-      @togglemodal="toggleModal" 
-      @copy-to-clipboard="copyToClipboard" 
-      v-if="displays.AttendanceList"/>
-    <Statistic 
-      v-if="displays.Statistic"
-      :members="members"
-      :proptest="proptest"
-    />
+    <main>
+      <nav id="nav-views" class="primary hide-from-print">
+        <ul>
+          <li><a href="" class="hide-from-print" :class="{ hilight : displays.AllMembers }"  @click.prevent="display('AllMembers')">Kaikki jäsenet</a></li>
+          <li><a href="" class="hide-from-print" :class="{hilight : displays.PaymentCheck}" @click.prevent="display('PaymentCheck')">Maksujen tarkastus</a></li>
+          <li><a href="" class="hide-from-print" :class="{hilight : displays.AttendanceList}" @click.prevent="display('AttendanceList')">Läsnäololistat</a></li>
+          <li><a href="" class="hide-from-print" :class="{hilight : displays.Statistic}" @click.prevent="display('Statistic')">Statistiikka</a></li>
+        </ul>
+      </nav>
+      <AllMembers 
+        :members="members" 
+        @remove-member="removeMember" 
+        @togglemodal="toggleModal"
+        @copy-to-clipboard="copyToClipboard"
+        v-if="displays.AllMembers" />
+      <PaymentCheck
+        :members="members" 
+        @togglemodal="toggleModal" 
+        @copy-to-clipboard="copyToClipboard" 
+        @toggle-paid="togglePaid"
+        v-if="displays.PaymentCheck"/>
+      <AttendanceList 
+        :members="members"
+        @togglemodal="toggleModal" 
+        @copy-to-clipboard="copyToClipboard" 
+        v-if="displays.AttendanceList"/>
+      <Statistic 
+        v-if="displays.Statistic"
+        :members="members"
+        :proptest="proptest"
+      />
+    </main>
   </div>
   <div id="login-wrapper" v-else>
     <div id="login-form">
@@ -233,6 +235,16 @@ p {
   color: $white;
 }
 
+content {
+  margin: 3rem auto;
+  text-align: center;
+  height: 100%;
+}
+
+html {
+  height: 100%;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -324,31 +336,46 @@ p {
   }
 }
 
+main {
+  display: grid;
+  /* display: flex; */
+  /* flex-direction: row; */
+  grid-template-columns: 240px auto;
+  /* grid-template-rows: 100%; */
+}
+
 #nav-views {
+  background: $tintblue;
+  min-height: calc(100vh - 96px);
+  height: 100%;
   text-align: left;
-  margin: 0;
-  padding: 1em 0;
+  padding-top: 1em;
   padding-left: 40px;
   ul {
     list-style: none;
     margin: 0;
     padding: 0;
     li {
-      display: inline-block;
       margin-right: 1rem;
       color: $white;
       text-transform: uppercase;
-      font-size: .9rem;
-      padding-bottom: .3rem;
-      border-bottom: 4px solid $tintblue;
-      &:hover {
-        border-bottom-color: $orange;
-      }
-      &.hilight {
-        border-bottom-color: $orange;
+      font-size: .8rem;
+      margin-bottom: .6rem;
+      a {
+        border-bottom: 2px solid $tintblue;
+        &:hover {
+          border-bottom-color: $neonblue;
+        }
+        &.hilight {
+          border-bottom-color: $orange;
+        }
       }
     }
   }
+}
+
+nav.selection {
+  background: red;
 }
 
 .nav-secondary {

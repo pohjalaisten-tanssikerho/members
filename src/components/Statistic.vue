@@ -1,131 +1,133 @@
 <template>
-  <h1>Kaikki kurssit</h1>
-  <div class="charts">
-    <div class="card">
-      <h2>Yleistä</h2>
-      <StatisticGeneral
-        :total="allCourseStatistic.follower + allCourseStatistic.leader"
-        :income="allCourseStatisticIncome"
-        :payment="allCourseStatistic.payment"
-      />
+  <div class="content">
+    <h1>Kaikki kurssit</h1>
+    <div class="charts">
+      <div class="card">
+        <h2>Yleistä</h2>
+        <StatisticGeneral
+          :total="allCourseStatistic.follower + allCourseStatistic.leader"
+          :income="allCourseStatisticIncome"
+          :payment="allCourseStatistic.payment"
+        />
+      </div>
+      <div class="card">
+        <h2>Opiskelija status</h2>
+        <canvas id="all-member-status" height="300"></canvas>
+      </div>
+      <div class="card">
+        <h2>Asuinpaikkakunta</h2>
+        <canvas id="all-hometown" height="300"></canvas>
+      </div>
+      <div class="card">
+        <h2>Paritasapaino</h2>
+        <canvas id="all-pair-balance" height="300"></canvas>
+      </div>
+      <div class="card grid-span-2">
+        <h2>Kurssijakauma osallistujien mukaan</h2>
+        <canvas id="all-courses" height="150"></canvas>
+      </div>
+      <div class="card grid-span-2">
+        <h2>Tuotot euroissa</h2>
+        <canvas id="all-income" height="150"></canvas>
+      </div>
     </div>
-    <div class="card">
-      <h2>Opiskelija status</h2>
-      <canvas id="all-member-status" height="300"></canvas>
-    </div>
-    <div class="card">
-      <h2>Asuinpaikkakunta</h2>
-      <canvas id="all-hometown" height="300"></canvas>
-    </div>
-    <div class="card">
-      <h2>Paritasapaino</h2>
-      <canvas id="all-pair-balance" height="300"></canvas>
-    </div>
-    <div class="card grid-span-2">
-      <h2>Kurssijakauma osallistujien mukaan</h2>
-      <canvas id="all-courses" height="150"></canvas>
-    </div>
-    <div class="card grid-span-2">
-      <h2>Tuotot euroissa</h2>
-      <canvas id="all-income" height="150"></canvas>
-    </div>
-  </div>
 
-  <h1>Alkeet</h1>
+    <h1>Alkeet</h1>
 
-  <div class="charts">
-    <div class="card">
-      <h2>Yleistä</h2>
-      <StatisticGeneral
-        :total="alkeet.follower + alkeet.leader"
-        :income="alkeetIncome"
-        :payment="alkeet.payment"
-      />
+    <div class="charts">
+      <div class="card">
+        <h2>Yleistä</h2>
+        <StatisticGeneral
+          :total="alkeet.follower + alkeet.leader"
+          :income="alkeetIncome"
+          :payment="alkeet.payment"
+        />
+      </div>
+      <div class="card">
+        <h2>Opiskelija status</h2>
+        <canvas id="alkeet-member-status" height="300"></canvas>
+      </div>
+      <div class="card">
+        <h2>Asuinpaikkakunta</h2>
+        <canvas id="alkeet-hometown" height="300"></canvas>
+      </div>
+      <div class="card">
+        <h2>Paritasapaino</h2>
+        <canvas id="alkeet-pair-balance" height="300"></canvas>
+      </div>
     </div>
-    <div class="card">
-      <h2>Opiskelija status</h2>
-      <canvas id="alkeet-member-status" height="300"></canvas>
-    </div>
-    <div class="card">
-      <h2>Asuinpaikkakunta</h2>
-      <canvas id="alkeet-hometown" height="300"></canvas>
-    </div>
-    <div class="card">
-      <h2>Paritasapaino</h2>
-      <canvas id="alkeet-pair-balance" height="300"></canvas>
-    </div>
-  </div>
 
-  <h1>Alkeet oman parin kanssa</h1>
-  <div class="charts">
-    <div class="card">
-      <h2>Yleistä</h2>
-      <StatisticGeneral
-        :total="alkeetOma.follower + alkeetOma.leader"
-        :income="alkeetOmaIncome"
-        :payment="alkeetOma.payment"
-      />
+    <h1>Alkeet oman parin kanssa</h1>
+    <div class="charts">
+      <div class="card">
+        <h2>Yleistä</h2>
+        <StatisticGeneral
+          :total="alkeetOma.follower + alkeetOma.leader"
+          :income="alkeetOmaIncome"
+          :payment="alkeetOma.payment"
+        />
+      </div>
+      <div class="card">
+        <h2>Opiskelija status</h2>
+        <canvas id="alkeetOma-member-status" height="300"></canvas>
+      </div>
+      <div class="card">
+        <h2>Asuinpaikkakunta</h2>
+        <canvas id="alkeetOma-hometown" height="300"></canvas>
+      </div>
+      <div class="card">
+        <h2>Paritasapaino</h2>
+        <canvas id="alkeetOma-pair-balance" height="300"></canvas>
+      </div>
     </div>
-    <div class="card">
-      <h2>Opiskelija status</h2>
-      <canvas id="alkeetOma-member-status" height="300"></canvas>
-    </div>
-    <div class="card">
-      <h2>Asuinpaikkakunta</h2>
-      <canvas id="alkeetOma-hometown" height="300"></canvas>
-    </div>
-    <div class="card">
-      <h2>Paritasapaino</h2>
-      <canvas id="alkeetOma-pair-balance" height="300"></canvas>
-    </div>
-  </div>
 
-  <h1>Alkeisjatko</h1>
-  <div class="charts">
-    <div class="card">
-      <h2>Yleistä</h2>
-      <StatisticGeneral
-        :total="alkeisjatko.follower + alkeisjatko.leader"
-        :income="alkeisjatkoIncome"
-        :payment="alkeisjatko.payment"
-      />
+    <h1>Alkeisjatko</h1>
+    <div class="charts">
+      <div class="card">
+        <h2>Yleistä</h2>
+        <StatisticGeneral
+          :total="alkeisjatko.follower + alkeisjatko.leader"
+          :income="alkeisjatkoIncome"
+          :payment="alkeisjatko.payment"
+        />
+      </div>
+      <div class="card">
+        <h2>Opiskelija status</h2>
+        <canvas id="alkeisjatko-member-status" height="300"></canvas>
+      </div>
+      <div class="card">
+        <h2>Asuinpaikkakunta</h2>
+        <canvas id="alkeisjatko-hometown" height="300"></canvas>
+      </div>
+      <div class="card">
+        <h2>Paritasapaino</h2>
+        <canvas id="alkeisjatko-pair-balance" height="300"></canvas>
+      </div>
     </div>
-    <div class="card">
-      <h2>Opiskelija status</h2>
-      <canvas id="alkeisjatko-member-status" height="300"></canvas>
-    </div>
-    <div class="card">
-      <h2>Asuinpaikkakunta</h2>
-      <canvas id="alkeisjatko-hometown" height="300"></canvas>
-    </div>
-    <div class="card">
-      <h2>Paritasapaino</h2>
-      <canvas id="alkeisjatko-pair-balance" height="300"></canvas>
-    </div>
-  </div>
 
-  <h1>Jatko</h1>
+    <h1>Jatko</h1>
 
-  <div class="charts">
-    <div class="card">
-      <h2>Yleistä</h2>
-      <StatisticGeneral
-        :total="jatko.follower + jatko.leader"
-        :income="jatkoIncome"
-        :payment="jatko.payment"
-      />
-    </div>
-    <div class="card">
-      <h2>Opiskelija status</h2>
-      <canvas id="jatko-member-status" height="300"></canvas>
-    </div>
-    <div class="card">
-      <h2>Asuinpaikkakunta</h2>
-      <canvas id="jatko-hometown" height="300"></canvas>
-    </div>
-    <div class="card">
-      <h2>Paritasapaino</h2>
-      <canvas id="jatko-pair-balance" height="300"></canvas>
+    <div class="charts">
+      <div class="card">
+        <h2>Yleistä</h2>
+        <StatisticGeneral
+          :total="jatko.follower + jatko.leader"
+          :income="jatkoIncome"
+          :payment="jatko.payment"
+        />
+      </div>
+      <div class="card">
+        <h2>Opiskelija status</h2>
+        <canvas id="jatko-member-status" height="300"></canvas>
+      </div>
+      <div class="card">
+        <h2>Asuinpaikkakunta</h2>
+        <canvas id="jatko-hometown" height="300"></canvas>
+      </div>
+      <div class="card">
+        <h2>Paritasapaino</h2>
+        <canvas id="jatko-pair-balance" height="300"></canvas>
+      </div>
     </div>
   </div>
 </template>

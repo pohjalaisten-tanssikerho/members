@@ -1,5 +1,5 @@
 <template>
-  <div class="margin-bottom">
+  <div class="content">
     <nav class="nav-secondary">
       <a href="" @click.prevent="$emit('togglemodal', 'mails')">Sähköpostit</a>
     </nav>

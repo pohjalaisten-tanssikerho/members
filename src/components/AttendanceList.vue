@@ -1,43 +1,46 @@
 <template>
+  <div class="content">
 
-  <p class="hide-from-print add-margin">Printtaaminen piilottaa kaikki tarpeettoman sivulta. Printtaus-asetuksista kannattaa valita printtaus taustakuvien kanssa.</p>
+    <p class="hide-from-print add-margin">Printtaaminen piilottaa kaikki tarpeettoman sivulta. Printtaus-asetuksista kannattaa valita printtaus taustakuvien kanssa.</p>
 
-  <nav class="nav-secondary">
-    <a href="" @click.prevent="$emit('togglemodal', 'membersByCourses')">sähköpostit kursseittain</a>
-    <a href="" @click.prevent="print">printtaa</a>
-  </nav>
+    <nav class="nav-secondary">
+      <a href="" @click.prevent="$emit('togglemodal', 'membersByCourses')">sähköpostit kursseittain</a>
+      <a href="" @click.prevent="print">printtaa</a>
+    </nav>
 
-  <div id="membersByCourses" class="hidden modal">
-    <button @click="$emit('togglemodal', 'membersByCourses')">sulje</button>
-    <span id="copyMessage" class="hidden sm">ok</span>
-    <div class="mail-list">
-      <p>Sähköpostia lähettäessäsi sähköpostien osoitteet tulee kirjoittaa BCC-kenttään ja TO-kenttään oma osoitteesi, eli osoite mistä sähköpostia lähetetään. Painamalla nappulaa "kopioi leikepöytään" voit helposti kopioida kaikki osoitteet.</p>
-      <h2>Alkeet</h2> <button class="margin-bottom" @click="$emit('copy-to-clipboard', 'alkeet')">kopioi leikepöytään</button>
-      <textarea id="alkeet" :value="sAlkeet" readonly></textarea>
-      <h2>Alkeet oman parin kanssa</h2> <button class="margin-bottom" @click="$emit('copy-to-clipboard', 'alkeet-oma')">kopioi leikepöytään</button>
-      <textarea id="alkeet-oma" :value="sAlkeetOma" readonly></textarea>
-      <h2>Alkeisjatko</h2> <button class="margin-bottom" @click="$emit('copy-to-clipboard', 'alkeisjatko')">kopioi leikepöytään</button>
-      <textarea id="alkeisjatko" :value="sAlkeisjatko" readonly></textarea>
-      <h2>Jatko</h2> <button class="margin-bottom" @click="$emit('copy-to-clipboard', 'jatko')">kopioi leikepöytään</button>
-      <textarea id="jatko" :value="sJatko" readonly></textarea>
+    <div id="membersByCourses" class="hidden modal">
+      <button @click="$emit('togglemodal', 'membersByCourses')">sulje</button>
+      <span id="copyMessage" class="hidden sm">ok</span>
+      <div class="mail-list">
+        <p>Sähköpostia lähettäessäsi sähköpostien osoitteet tulee kirjoittaa BCC-kenttään ja TO-kenttään oma osoitteesi, eli osoite mistä sähköpostia lähetetään. Painamalla nappulaa "kopioi leikepöytään" voit helposti kopioida kaikki osoitteet.</p>
+        <h2>Alkeet</h2> <button class="margin-bottom" @click="$emit('copy-to-clipboard', 'alkeet')">kopioi leikepöytään</button>
+        <textarea id="alkeet" :value="sAlkeet" readonly></textarea>
+        <h2>Alkeet oman parin kanssa</h2> <button class="margin-bottom" @click="$emit('copy-to-clipboard', 'alkeet-oma')">kopioi leikepöytään</button>
+        <textarea id="alkeet-oma" :value="sAlkeetOma" readonly></textarea>
+        <h2>Alkeisjatko</h2> <button class="margin-bottom" @click="$emit('copy-to-clipboard', 'alkeisjatko')">kopioi leikepöytään</button>
+        <textarea id="alkeisjatko" :value="sAlkeisjatko" readonly></textarea>
+        <h2>Jatko</h2> <button class="margin-bottom" @click="$emit('copy-to-clipboard', 'jatko')">kopioi leikepöytään</button>
+        <textarea id="jatko" :value="sJatko" readonly></textarea>
+      </div>
     </div>
+
+    <div class="max-size">
+
+      <h2>Alkeet</h2>
+      <CourseList class="print-brake" v-bind:courseMembers="alkeet" />
+
+      <h2>Alkeet oman parin kanssa</h2>
+      <CourseList class="print-brake" v-bind:courseMembers="alkeetOma" />
+
+      <h2>Alkeisjatko</h2>
+      <CourseList class="print-brake" v-bind:courseMembers="alkeisjatko" />
+
+      <h2>Jatko</h2>
+      <CourseList class="print-brake" v-bind:courseMembers="jatko" />
+
+    </div>
+
   </div>
-
-<div class="max-size">
-
-    <h2>Alkeet</h2>
-    <CourseList class="print-brake" v-bind:courseMembers="alkeet" />
-
-    <h2>Alkeet oman parin kanssa</h2>
-    <CourseList class="print-brake" v-bind:courseMembers="alkeetOma" />
-
-    <h2>Alkeisjatko</h2>
-    <CourseList class="print-brake" v-bind:courseMembers="alkeisjatko" />
-
-    <h2>Jatko</h2>
-    <CourseList class="print-brake" v-bind:courseMembers="jatko" />
-
-</div>
 
 </template>
 
