@@ -1,8 +1,8 @@
 <template>
   <ul>
-    <li>osallistujia: {{ total }} </li>
-    <li>maksaneita: {{ payment.personPaid }}</li>
-    <li>tuotot: {{ income.paid }} € / {{ income.total }} €</li>
+    <li>osallistujia: {{ statistic.follower + statistic.leader }} </li>
+    <li>maksaneita: {{ statistic.paid }}</li>
+    <li>tuotot: {{ statistic.totalPaid }} € / {{ statistic.totalAmount }} €</li>
   </ul>
 </template>
 
@@ -10,9 +10,7 @@
 export default {
   name: 'General Statistic',
   props: {
-    income: Object,
-    payment: Object,
-    total: Number,
+    statistic: Object,
   },
 }
 </script>
