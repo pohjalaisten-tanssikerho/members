@@ -22,9 +22,9 @@
       <nav id="nav-views" class="primary hide-from-print">
         <ul>
           <li><a href="" class="hide-from-print" :class="{ hilight : displays.AllMembers }"  @click.prevent="display('AllMembers')">Kaikki jäsenet</a></li>
-          <li><a href="" class="hide-from-print" :class="{hilight : displays.PaymentCheck}" @click.prevent="display('PaymentCheck')">Maksujen tarkastus</a></li>
-          <li><a href="" class="hide-from-print" :class="{hilight : displays.AttendanceList}" @click.prevent="display('AttendanceList')">Läsnäololistat</a></li>
-          <li><a href="" class="hide-from-print" :class="{hilight : displays.Statistic}" @click.prevent="display('Statistic')">Statistiikka</a></li>
+          <li><a href="" class="hide-from-print" :class="{ hilight : displays.PaymentCheck }" @click.prevent="display('PaymentCheck')">Maksujen tarkastus</a></li>
+          <li><a href="" class="hide-from-print" :class="{ hilight : displays.AttendanceList }" @click.prevent="display('AttendanceList')">Läsnäololistat</a></li>
+          <li><a href="" class="hide-from-print" :class="{ hilight : displays.Statistic }" @click.prevent="display('Statistic')">Statistiikka</a></li>
         </ul>
       </nav>
       <AllMembers 
@@ -94,6 +94,7 @@ export default {
         { season: '2020s', selected: false, },
         { season: '2020k', selected: false, }
       ],
+      unsubscribe: function() { return undefined },
     }  
   },
   methods: {
@@ -147,7 +148,7 @@ export default {
       document.getElementById('copyMessage').classList.remove('hidden')
     },
     fetchFireBase: function(collection, members) {
-      db.collection(collection)
+      this.unsubscribe = db.collection(collection)
         .orderBy('lname')
         .onSnapshot((querySnapshot) => {
           members.length = 0
@@ -172,6 +173,7 @@ export default {
         })
     },
     logout: function() {
+      this.unsubscribe()
       auth
         .signOut()
         .then(() => {
@@ -184,6 +186,7 @@ export default {
         .catch(e => console.warn('Error when signout: ' + e))
     },
     changeCollection: function(season) {
+      this.unsubscribe()
       this.currentCollection = season.season
       this.seasons.forEach(season => season.selected = false)
       season.selected = true
