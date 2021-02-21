@@ -4,11 +4,7 @@
     <div class="charts">
       <div class="card">
         <h2>Yleistä</h2>
-        <StatisticGeneral
-          :total="allCourseStatistic.follower + allCourseStatistic.leader"
-          :income="allCourseStatisticIncome"
-          :payment="allCourseStatistic.payment"
-        />
+        <StatisticGeneral :statistic="statistic.all" />
       </div>
       <div class="card">
         <h2>Opiskelija status</h2>
@@ -33,15 +29,10 @@
     </div>
 
     <h1>Alkeet</h1>
-
     <div class="charts">
       <div class="card">
         <h2>Yleistä</h2>
-        <StatisticGeneral
-          :total="alkeet.follower + alkeet.leader"
-          :income="alkeetIncome"
-          :payment="alkeet.payment"
-        />
+        <StatisticGeneral :statistic="statistic.alkeet" />
       </div>
       <div class="card">
         <h2>Opiskelija status</h2>
@@ -61,11 +52,7 @@
     <div class="charts">
       <div class="card">
         <h2>Yleistä</h2>
-        <StatisticGeneral
-          :total="alkeetOma.follower + alkeetOma.leader"
-          :income="alkeetOmaIncome"
-          :payment="alkeetOma.payment"
-        />
+        <StatisticGeneral :statistic="statistic.alkeetOma" />
       </div>
       <div class="card">
         <h2>Opiskelija status</h2>
@@ -85,11 +72,7 @@
     <div class="charts">
       <div class="card">
         <h2>Yleistä</h2>
-        <StatisticGeneral
-          :total="alkeisjatko.follower + alkeisjatko.leader"
-          :income="alkeisjatkoIncome"
-          :payment="alkeisjatko.payment"
-        />
+        <StatisticGeneral :statistic="statistic.alkeisjatko" />
       </div>
       <div class="card">
         <h2>Opiskelija status</h2>
@@ -110,11 +93,7 @@
     <div class="charts">
       <div class="card">
         <h2>Yleistä</h2>
-        <StatisticGeneral
-          :total="jatko.follower + jatko.leader"
-          :income="jatkoIncome"
-          :payment="jatko.payment"
-        />
+        <StatisticGeneral :statistic="statistic.jatko" />
       </div>
       <div class="card">
         <h2>Opiskelija status</h2>
@@ -140,7 +119,7 @@ import CourseStatistic from '../utilities/CourseStatistic.js'
 import Pie from '../utilities/Pie.js'
 import StatisticGeneral from './StatisticGeneral.vue'
 import BarAllCourses from '../utilities/BarAllCourses.js'
-import { onMounted, reactive, watchEffect, ref, computed } from 'vue'
+import { onMounted, reactive, watchEffect, ref, computed, watch } from 'vue'
 
 export default {
   components: { StatisticGeneral },
@@ -332,8 +311,6 @@ export default {
         }
       }) 
 
-    console.table(statistic.value.alkeetOma.membership)
-
     const alkeetIncome = reactive({ paid: 0, total: 0, })
     const alkeetOmaIncome = reactive({ paid: 0, total: 0, })
     const alkeisjatkoIncome = reactive({ paid: 0, total: 0, })
@@ -494,46 +471,51 @@ export default {
       (jatko.leader + jatko.follower),
       'all-courses')
 
+    const createPairBalance = function(memberData, target) {
+      const memberPairBalanceLabels = ['viejä', 'seuraaja']
+      const memberBar = new BarPairBalance(memberData.leader, memberData.follower, memberPairBalanceLabels)
+      createChart(target, memberBar.data)
+    }
+    const createMemberPie = function(memberData, target) {
+      const memberStatusLabels = ['opiskelija' , 'osakuntalainen', 'opiskelija ja osakuntalainen', 'muu']
+      const { student, club, studentAndClub, other } = memberData.membership
+      const memberPie = new Pie(student, club, studentAndClub, other, memberStatusLabels)
+      createChart(target, memberPie.data)
+    }
+    const createHometownPie = function(memberData, target) {
+      const memberHometownLabels = ['Helsinki                   ', 'Espoo              ', 'Vantaa                        ', 'muu']
+      const { helsinki, espoo, vantaa, other } = memberData.hometown
+      const hometownPie = new Pie(helsinki, espoo, vantaa, other, memberHometownLabels)
+      createChart(target, hometownPie.data)
+    }
+
+    function drawAll() {
+        createPairBalance(statistic.value.alkeet, 'alkeet-pair-balance')
+        createPairBalance(statistic.value.alkeetOma, 'alkeetOma-pair-balance')
+        createPairBalance(statistic.value.alkeisjatko, 'alkeisjatko-pair-balance')
+        createPairBalance(statistic.value.jatko, 'jatko-pair-balance')
+        createPairBalance(statistic.value.all, 'all-pair-balance')
+
+        createMemberPie(statistic.value.alkeet, 'alkeet-member-status')
+        createMemberPie(statistic.value.alkeetOma, 'alkeetOma-member-status')
+        createMemberPie(statistic.value.alkeisjatko, 'alkeisjatko-member-status')
+        createMemberPie(statistic.value.jatko, 'jatko-member-status')
+        createMemberPie(statistic.value.all, 'all-member-status')
+
+        createHometownPie(statistic.value.alkeet, 'alkeet-hometown')
+        createHometownPie(statistic.value.alkeetOma, 'alkeetOma-hometown')
+        createHometownPie(statistic.value.alkeisjatko, 'alkeisjatko-hometown')
+        createHometownPie(statistic.value.jatko, 'jatko-hometown')
+        createHometownPie(statistic.value.all, 'all-hometown')
+
+        barAllCourses.draw()
+    }
+
     onMounted(() => {
-
-      const createPairBalance = function(memberData, target) {
-        const memberPairBalanceLabels = ['viejä', 'seuraaja']
-        const memberBar = new BarPairBalance(memberData.leader, memberData.follower, memberPairBalanceLabels)
-        createChart(target, memberBar.data)
-      }
-      const createMemberPie = function(memberData, target) {
-        const memberStatusLabels = ['opiskelija' , 'osakuntalainen', 'opiskelija ja osakuntalainen', 'muu']
-        const { student, club, studentAndClub, other } = memberData.membership
-        const memberPie = new Pie(student, club, studentAndClub, other, memberStatusLabels)
-        createChart(target, memberPie.data)
-      }
-      const createHometownPie = function(memberData, target) {
-        const memberHometownLabels = ['Helsinki                   ', 'Espoo              ', 'Vantaa                        ', 'muu']
-        const { helsinki, espoo, vantaa, other } = memberData.hometown
-        const hometownPie = new Pie(helsinki, espoo, vantaa, other, memberHometownLabels)
-        createChart(target, hometownPie.data)
-      }
-
-      createPairBalance(alkeet, 'alkeet-pair-balance')
-      createPairBalance(alkeetOma, 'alkeetOma-pair-balance')
-      createPairBalance(alkeisjatko, 'alkeisjatko-pair-balance')
-      createPairBalance(jatko, 'jatko-pair-balance')
-      createPairBalance(allCourseStatistic, 'all-pair-balance')
-
-      createMemberPie(alkeet, 'alkeet-member-status')
-      createMemberPie(alkeetOma, 'alkeetOma-member-status')
-      createMemberPie(alkeisjatko, 'alkeisjatko-member-status')
-      createMemberPie(jatko, 'jatko-member-status')
-      createMemberPie(allCourseStatistic, 'all-member-status')
-
-      createHometownPie(alkeet, 'alkeet-hometown')
-      createHometownPie(alkeetOma, 'alkeetOma-hometown')
-      createHometownPie(alkeisjatko, 'alkeisjatko-hometown')
-      createHometownPie(jatko, 'jatko-hometown')
-      createHometownPie(allCourseStatistic, 'all-hometown')
-
-      barAllCourses.draw()
-
+      watch(statistic, () => {
+        drawAll()
+      })
+      drawAll()
     }) 
 
     watchEffect(() => {
