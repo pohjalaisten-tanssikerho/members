@@ -272,18 +272,39 @@ html {
     border-radius: .5em;
     padding: 1em;
     form {
+      margin: 1rem;
       text-align: left;
       button {
-        margin: 1em;
+        background: $lightblue;
+        margin: 1rem;
+        padding: .7rem 2rem;
         margin-left: 0;
         text-align: right;
+        border: solid 2px $tintblue;
+        color: $white;
+        font-weight: bold;
+        outline: none;
+        &:hover {
+          border-color: $neonblue;
+        }
+        &:active {
+          border-color: $orange;
+        }
       }
       label {
         padding-right: 1em;
         color: $white;
       }
       input {
-        width: 280px;
+        margin-top: .3rem;
+        width: 260px;
+        height: 1.3rem;
+        border-radius: 0;
+        border: solid 2px $nightblue;
+        &:focus, &:hover {
+          outline: 1px solid $neonblue;
+          outline-offset: -2px;
+        }
       }
     }
     p {
@@ -345,6 +366,7 @@ main {
   grid-template-columns: 240px auto;
   /* grid-template-rows: 100%; */
 }
+
 
 #nav-views {
   background: $tintblue;
