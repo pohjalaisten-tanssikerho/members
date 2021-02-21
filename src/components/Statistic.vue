@@ -404,11 +404,12 @@ h1 {
 }
 
 .charts {
+  @media only screen and (min-width: 1425px) {
+    max-width: 1200px;
+  }
   display: grid;
-  max-width: 1200px;
   margin: 0 auto;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  justify-content: space-between;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   justify-items: center;
   div {
     border: 2px solid $lightblue;
