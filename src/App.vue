@@ -28,23 +28,27 @@
         </ul>
       </nav>
       <AllMembers 
+        class="display"
         :members="members" 
         @remove-member="removeMember" 
         @togglemodal="toggleModal"
         @copy-to-clipboard="copyToClipboard"
         v-if="displays.AllMembers" />
       <PaymentCheck
+        class="display"
         :members="members" 
         @togglemodal="toggleModal" 
         @copy-to-clipboard="copyToClipboard" 
         @toggle-paid="togglePaid"
         v-if="displays.PaymentCheck"/>
       <AttendanceList 
+        class="display"
         :members="members"
         @togglemodal="toggleModal" 
         @copy-to-clipboard="copyToClipboard" 
         v-if="displays.AttendanceList"/>
       <Statistic 
+        class="display"
         v-if="displays.Statistic"
         :members="members"
         :proptest="proptest"
@@ -361,10 +365,11 @@ html {
 
 main {
   display: grid;
-  /* display: flex; */
-  /* flex-direction: row; */
-  grid-template-columns: 240px auto;
-  /* grid-template-rows: 100%; */
+  grid-template-columns: 220px auto;
+}
+
+.display {
+  margin-top: 1rem;
 }
 
 
