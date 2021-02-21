@@ -268,7 +268,6 @@ html {
   #login-form {
     background: $opacity-half;
     width: 400px;
-    height: 200px;
     border: 2px solid $tintblue;
     border-radius: .5em;
     padding: 1em;
