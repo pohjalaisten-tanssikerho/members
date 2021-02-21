@@ -140,7 +140,7 @@ import CourseStatistic from '../utilities/CourseStatistic.js'
 import Pie from '../utilities/Pie.js'
 import StatisticGeneral from './StatisticGeneral.vue'
 import BarAllCourses from '../utilities/BarAllCourses.js'
-import { onMounted, reactive, watchEffect, ref } from 'vue'
+import { onMounted, reactive, watchEffect, ref, computed } from 'vue'
 
 export default {
   components: { StatisticGeneral },
@@ -148,6 +148,66 @@ export default {
     members: Array,
   },
   setup(props) {
+
+    const priceTable = {
+      "osakuntalainen": [
+        {
+          "name": "alkeet",
+          "price": "20€",
+          "ref": "1012"
+        },
+        {
+          "name": "alkeisjatko",
+          "price": "40€",
+          "ref": "1038"
+        },
+        {
+          "name": "jatko",
+          "price": "40€",
+          "ref": "1041"
+        }
+      ],
+      "opiskelija": [
+        {
+          "name": "alkeet",
+          "price": "40€",
+          "ref": "1119"
+        },
+        {
+          "name": "alkeisjatko",
+          "price": "60€",
+          "ref": "1135"
+        },
+        {
+          "name": "jatko",
+          "price": "60€",
+          "ref": "1148"
+        }
+      ],
+      "muut": [
+        {
+          "name": "alkeet",
+          "price": "80€",
+          "ref": "1915"
+        },
+        {
+          "name": "alkeisjatko",
+          "price": "90€",
+          "ref": "1931"
+        },
+        {
+          "name": "jatko",
+          "price": "90€",
+          "ref": "1944"
+        }
+      ]
+    }
+
+    async function getPrices() {
+      const response = await fetch('https://raw.githubusercontent.com/pohjalaisten-tanssikerho/web-page/master/data/prices.json')
+      const prices = await response.json()
+      return prices
+    }
 
     function getPrice(member, course, priceTable) {
 
@@ -164,11 +224,115 @@ export default {
       return priceTable[memberDiscount][courseDiscount]['price']
     }
 
-    async function getPrices() {
-      const response = await fetch('https://raw.githubusercontent.com/pohjalaisten-tanssikerho/web-page/master/data/prices.json')
-      const prices = await response.json()
-      return prices
-    }
+    // async function getPrices() {
+    //   const response = await fetch('https://raw.githubusercontent.com/pohjalaisten-tanssikerho/web-page/master/data/prices.json')
+    //   const prices = await response.json()
+    //   return prices
+    // }
+
+      const statistic = computed(() => {
+
+        function createCourseStatistic() {
+          return {
+            total: 0,
+            paid: 0,
+            totalPaid: 0,
+            totalAmount: 0,
+            follower: 0,
+            leader: 0,
+            hometown: {
+              helsinki: 0,
+              espoo: 0,
+              vantaa: 0,
+              muu: 0,
+            },
+            membership: {
+              hyy: '',
+              student: 0,
+              club: 0,
+              studentAndClub: 0,
+              other: 0,
+            }
+          }
+        }
+
+        const all = createCourseStatistic()
+        const alkeet = createCourseStatistic()
+        const alkeetOma = createCourseStatistic()
+        const alkeisjatko = createCourseStatistic()
+        const jatko = createCourseStatistic()
+
+        const addToCourse = (courseId, course, member) => {
+          all.total++
+          courseId.total++
+
+          if (course.paid) {
+            all.paid++
+            courseId.paid++
+          }
+
+          courseId.hometown[member.hometown.toLowerCase()]++
+          all.hometown[member.hometown.toLowerCase()]++
+
+          if (member.membership[0].club && member.membership[0].student) {
+            courseId.membership.studentAndClub++
+            all.membership.studentAndClub++
+          }  else if (!member.membership[0].club && !member.membership[0].student) {
+            courseId.membership.other++
+            all.membership.other++
+          } else if (member.membership[0].club) {
+            courseId.membership.club++
+            all.membership.club++
+          } else if (member.membership[0].student) {
+            courseId.membership.student++
+            all.membership.student++
+          }
+
+          courseId[course.role]++
+          all[course.role]++
+
+          const payment = parseInt(getPrice(member.membership[0], course.courseId, priceTable))
+
+          if (course.paid) {
+            courseId.totalPaid += payment
+            courseId.totalAmount += payment
+            all.totalPaid += payment
+            all.totalAmount += payment
+          } else {
+            courseId.totalAmount += payment
+            all.totalAmount += payment
+          }
+        }
+
+        props.members.forEach( member => {
+          member.courses.forEach( course => {
+            switch(course.courseId) {
+              case 'alkeet':
+                addToCourse(alkeet, course, member)
+                break
+              case 'alkeetOma':
+                addToCourse(alkeetOma, course, member)
+                break
+              case 'alkeisjatko':
+                addToCourse(alkeisjatko, course, member)
+                break
+              case 'jatko':
+                addToCourse(jatko, course, member)
+                break
+            }
+          })
+        })
+
+        return {
+          all: all,
+          alkeet: alkeet,
+          alkeetOma: alkeetOma,
+          alkeisjatko: alkeisjatko,
+          jatko: jatko,
+        }
+      }) 
+
+    console.table(statistic.value.alkeetOma.membership)
 
     const alkeetIncome = reactive({ paid: 0, total: 0, })
     const alkeetOmaIncome = reactive({ paid: 0, total: 0, })
@@ -386,7 +550,8 @@ export default {
       alkeetOmaIncome,
       alkeisjatkoIncome,
       jatkoIncome,
-      allCourseStatisticIncome
+      allCourseStatisticIncome,
+      statistic,
     }
 
   },
