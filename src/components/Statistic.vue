@@ -115,11 +115,10 @@
 
 import Chart from 'chart.js'
 import BarPairBalance from '../utilities/BarPairBalance.js'
-import CourseStatistic from '../utilities/CourseStatistic.js'
 import Pie from '../utilities/Pie.js'
 import StatisticGeneral from './StatisticGeneral.vue'
 import BarAllCourses from '../utilities/BarAllCourses.js'
-import { onMounted, reactive, watchEffect, ref, computed, watch } from 'vue'
+import { onMounted, computed, watch } from 'vue'
 
 export default {
   components: { StatisticGeneral },
@@ -182,10 +181,27 @@ export default {
       ]
     }
 
-    async function getPrices() {
-      const response = await fetch('https://raw.githubusercontent.com/pohjalaisten-tanssikerho/web-page/master/data/prices.json')
-      const prices = await response.json()
-      return prices
+    function createCourseStatistic() {
+      return {
+        total: 0,
+        paid: 0,
+        totalPaid: 0,
+        totalAmount: 0,
+        follower: 0,
+        leader: 0,
+        hometown: {
+          helsinki: 0,
+          espoo: 0,
+          vantaa: 0,
+          muu: 0,
+        },
+        membership: {
+          student: 0,
+          club: 0,
+          studentAndClub: 0,
+          other: 0,
+        }
+      }
     }
 
     function getPrice(member, course, priceTable) {
@@ -203,37 +219,7 @@ export default {
       return priceTable[memberDiscount][courseDiscount]['price']
     }
 
-    // async function getPrices() {
-    //   const response = await fetch('https://raw.githubusercontent.com/pohjalaisten-tanssikerho/web-page/master/data/prices.json')
-    //   const prices = await response.json()
-    //   return prices
-    // }
-
       const statistic = computed(() => {
-
-        function createCourseStatistic() {
-          return {
-            total: 0,
-            paid: 0,
-            totalPaid: 0,
-            totalAmount: 0,
-            follower: 0,
-            leader: 0,
-            hometown: {
-              helsinki: 0,
-              espoo: 0,
-              vantaa: 0,
-              muu: 0,
-            },
-            membership: {
-              hyy: '',
-              student: 0,
-              club: 0,
-              studentAndClub: 0,
-              other: 0,
-            }
-          }
-        }
 
         const all = createCourseStatistic()
         const alkeet = createCourseStatistic()
@@ -311,150 +297,6 @@ export default {
         }
       }) 
 
-    const alkeetIncome = reactive({ paid: 0, total: 0, })
-    const alkeetOmaIncome = reactive({ paid: 0, total: 0, })
-    const alkeisjatkoIncome = reactive({ paid: 0, total: 0, })
-    const jatkoIncome = reactive({ paid: 0, total: 0, }) 
-    const allCourseStatisticIncome = reactive({ paid: 0, total: 0, }) 
-
-    let barAllIncome = undefined
-    let isBarAllIncomeLoaded = ref(false)
-
-    getPrices().then(prices => {
-      props.members.forEach( member => {
-        member.courses.forEach( course => {
-          let amount = 0
-          switch(course.courseId) {
-            case 'alkeet':
-              amount = parseInt(getPrice(member.membership[0], course.courseId, prices))
-              if (course.paid) { alkeetIncome.paid += amount }
-              alkeetIncome.total += amount
-              break
-            case 'alkeetOma':
-              amount = parseInt(getPrice(member.membership[0], course.courseId, prices))
-              if (course.paid) { alkeetOmaIncome.paid += amount }
-              alkeetOmaIncome.total += amount
-              break
-            case 'alkeisjatko':
-              amount = parseInt(getPrice(member.membership[0], course.courseId, prices))
-              if (course.paid) { alkeisjatkoIncome.paid += amount }
-              alkeisjatkoIncome.total += amount
-              break
-            case 'jatko':
-              amount = parseInt(getPrice(member.membership[0], course.courseId, prices))
-              if (course.paid) { jatkoIncome.paid += amount }
-              jatkoIncome.total += amount
-              break
-          }
-        })
-      })
-
-      const allCourseIncome = [alkeetIncome, alkeetOmaIncome, alkeisjatkoIncome, jatkoIncome]
-      allCourseIncome.forEach( course => {
-        allCourseStatisticIncome.paid += course.paid
-        allCourseStatisticIncome.total += course.total
-      })
-
-      barAllIncome = new BarAllCourses(
-        (alkeetIncome.total), 
-        (alkeetOmaIncome.total), 
-        (alkeisjatkoIncome.total), 
-        (jatkoIncome.total), 
-        'all-income')
-
-      isBarAllIncomeLoaded.value = true
-
-    })
-
-    const addToHomeTown = function (member, course) {
-      switch(member.hometown) {
-        case 'Helsinki':
-          course.hometown.helsinki++
-          break
-        case 'Vantaa':
-          course.hometown.vantaa++
-          break
-        case 'Espoo':
-          course.hometown.espoo++
-          break
-        default: 
-          course.hometown.other++
-      }
-    }
-
-    const addToStudentStatus = function (student, club, course){
-      if (student && club) course.membership.studentAndClub++
-      else if (student && !club) course.membership.student++
-      else if (!student && club) course.membership.support++
-      else if (!student && !club) course.membership.other++
-    }
-
-    const addToRole = function(role, course) {
-      if (role === 'leader') course.leader++
-      else if (role === 'follower') course.follower++
-    }
-
-    const addToPayment = function(paid, course) {
-      if (paid) {
-        course.payment.personPaid++
-        course.payment.total++
-      }  else course.payment.total++
-    }
-
-    const alkeet = new CourseStatistic('alkeet')
-    const alkeetOma = new CourseStatistic('alkeetOma')
-    const alkeisjatko = new CourseStatistic('alkeisjatko')
-    const jatko = new CourseStatistic('jatko')
-
-    props.members.forEach( member => {
-      member.courses.forEach( course => {
-        switch(course.courseId) {
-          case 'alkeet':
-            addToHomeTown(member, alkeet)
-            addToStudentStatus(member.membership[0].student, member.membership[0].club, alkeet)
-            addToRole(course.role, alkeet)
-            addToPayment(course.paid, alkeet)
-            break
-          case 'alkeetOma':
-            addToHomeTown(member, alkeetOma)
-            addToStudentStatus(member.membership[0].student, member.membership[0].club, alkeetOma)
-            addToRole(course.role, alkeetOma)
-            addToPayment(course.paid, alkeetOma)
-            break
-          case 'alkeisjatko':
-            addToHomeTown(member, alkeisjatko)
-            addToStudentStatus(member.membership[0].student, member.membership[0].club, alkeisjatko)
-            addToRole(course.role, alkeisjatko)
-            addToPayment(course.paid, alkeisjatko)
-            break
-          case 'jatko':
-            addToHomeTown(member, jatko)
-            addToStudentStatus(member.membership[0].student, member.membership[0].club, jatko)
-            addToRole(course.role, jatko)
-            addToPayment(course.paid, jatko)
-            break
-        }
-      })
-    })
-
-    const allCourseStatistic = new CourseStatistic('all')
-
-    const courses = [alkeet, alkeetOma, alkeisjatko, jatko]
-    courses.forEach( course => {
-      allCourseStatistic.leader += course.leader
-      allCourseStatistic.follower += course.follower
-      allCourseStatistic.membership.student += course.membership.student
-      allCourseStatistic.membership.club += course.membership.club
-      allCourseStatistic.membership.studentAndClub += course.membership.studentAndClub
-      allCourseStatistic.membership.other += course.membership.other
-      allCourseStatistic.hometown.helsinki += course.hometown.helsinki
-      allCourseStatistic.hometown.espoo += course.hometown.espoo
-      allCourseStatistic.hometown.vantaa += course.hometown.vantaa
-      allCourseStatistic.hometown.other += course.hometown.other
-      allCourseStatistic.payment.personPaid += course.payment.personPaid
-      allCourseStatistic.payment.total += course.payment.total
-    })
-
     function createChart(chartId, chartData) {
       const ctx = document.getElementById(chartId);
       new Chart(ctx, {
@@ -463,13 +305,6 @@ export default {
         options: chartData.options,
       });
     }
-
-    const barAllCourses = new BarAllCourses(
-      (alkeet.leader + alkeet.follower), 
-      (alkeetOma.leader + alkeetOma.follower),
-      (alkeisjatko.leader + alkeisjatko.follower),
-      (jatko.leader + jatko.follower),
-      'all-courses')
 
     const createPairBalance = function(memberData, target) {
       const memberPairBalanceLabels = ['viejä', 'seuraaja']
@@ -488,6 +323,20 @@ export default {
       const hometownPie = new Pie(helsinki, espoo, vantaa, other, memberHometownLabels)
       createChart(target, hometownPie.data)
     }
+
+    const barAllIncome = new BarAllCourses(
+      (statistic.value.alkeet.totalAmount), 
+      (statistic.value.alkeetOma.totalAmount), 
+      (statistic.value.alkeisjatko.totalAmount), 
+      (statistic.value.jatko.totalAmount), 
+      'all-income')
+
+    const barAllCourses = new BarAllCourses(
+      (statistic.value.alkeet.leader + statistic.value.alkeet.follower), 
+      (statistic.value.alkeetOma.leader + statistic.value.alkeetOma.follower),
+      (statistic.value.alkeisjatko.leader + statistic.value.alkeisjatko.follower),
+      (statistic.value.jatko.leader + statistic.value.jatko.follower),
+      'all-courses')
 
     function drawAll() {
         createPairBalance(statistic.value.alkeet, 'alkeet-pair-balance')
@@ -509,6 +358,7 @@ export default {
         createHometownPie(statistic.value.all, 'all-hometown')
 
         barAllCourses.draw()
+        barAllIncome.draw()
     }
 
     onMounted(() => {
@@ -518,21 +368,7 @@ export default {
       drawAll()
     }) 
 
-    watchEffect(() => {
-      if (isBarAllIncomeLoaded.value) barAllIncome.draw()
-    })
-
     return { 
-      allCourseStatistic, 
-      alkeet, 
-      alkeetOma, 
-      alkeisjatko, 
-      jatko,
-      alkeetIncome,
-      alkeetOmaIncome,
-      alkeisjatkoIncome,
-      jatkoIncome,
-      allCourseStatisticIncome,
       statistic,
     }
 
