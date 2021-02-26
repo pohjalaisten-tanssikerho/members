@@ -1,6 +1,6 @@
 <template>
   <div v-if="isLogged">
-    <nav id="nav-main">
+    <nav class="hide-from-print" id="nav-main">
       <ul v-if="currentCollection === 'demo'">
         <!-- <li>Analyysi</li> -->
         <li></li>
@@ -327,7 +327,14 @@ html {
 }
 
 #nav-main {
-  display: grid;
+  @media screen {
+    display: grid;
+  }
+  @media print {
+    .hide-from-print {
+      display: none;
+    }
+  }
   grid-template-columns: repeat(2, 1fr);
   border: 3px solid $tintblue;
   border-left: none;
@@ -401,10 +408,6 @@ main {
       }
     }
   }
-}
-
-nav.selection {
-  background: red;
 }
 
 .nav-secondary {

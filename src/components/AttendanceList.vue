@@ -114,7 +114,7 @@ export default {
 <style lang="scss" scoped>
 
 .max-size {
-  max-width: 900px;
+  max-width: 1050px;
   margin: 0 auto;
   margin-bottom: 1rem;
   color: $white;
@@ -158,6 +158,7 @@ export default {
       margin-bottom: .8em;
       background-color: lightgray;
       padding: .4em;
+      width: 100vw;
     }
      h2 ~ h2 {
        margin-top: 2em;
