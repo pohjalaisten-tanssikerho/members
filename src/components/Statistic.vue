@@ -387,6 +387,12 @@ h1 {
 }
 
 .charts {
+  @media only screen and (min-width: 820px) {
+    max-width: 590px;
+  }
+  @media only screen and (min-width: 1135px) {
+    max-width: 900px;
+  }
   @media only screen and (min-width: 1425px) {
     max-width: 1200px;
   }
