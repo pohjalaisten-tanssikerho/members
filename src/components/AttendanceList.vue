@@ -47,6 +47,7 @@
 <script>
 
 import CourseList from './CourseList.vue'
+import { watch } from 'vue'
 
 export default {
 
@@ -66,33 +67,32 @@ export default {
       sJatko: ''
     }
   },
-  mounted: function() {
-    this.$nextTick(function() {
-
+  methods: {
+    createAttendanceList: function() {
       const aAlkeet = []
       const aAlkeetOma = []
       const aAlkeisjatko = []
       const aJatko = []
 
       this.members.forEach(member => {
-          member.courses.forEach(course => {
-              if (course.courseId === 'alkeet') {
-                this.alkeet.push(`${member.lname}, ${member.fname}`)
-                aAlkeet.push(member.email)
-              }
-              if (course.courseId === 'alkeetOma') {
-                this.alkeetOma.push(`${member.lname}, ${member.fname}`)
-                aAlkeetOma.push(member.email)
-              }
-              if (course.courseId === 'alkeisjatko') {
-                this.alkeisjatko.push(`${member.lname}, ${member.fname}`)
-                aAlkeisjatko.push(member.email)
-              }
-              if (course.courseId === 'jatko') {
-                this.jatko.push(`${member.lname}, ${member.fname}`)
-                aJatko.push(member.email)
-              }
-          })
+        member.courses.forEach(course => {
+          if (course.courseId === 'alkeet') {
+            this.alkeet.push(`${member.lname}, ${member.fname}`)
+            aAlkeet.push(member.email)
+          }
+          if (course.courseId === 'alkeetOma') {
+            this.alkeetOma.push(`${member.lname}, ${member.fname}`)
+            aAlkeetOma.push(member.email)
+          }
+          if (course.courseId === 'alkeisjatko') {
+            this.alkeisjatko.push(`${member.lname}, ${member.fname}`)
+            aAlkeisjatko.push(member.email)
+          }
+          if (course.courseId === 'jatko') {
+            this.jatko.push(`${member.lname}, ${member.fname}`)
+            aJatko.push(member.email)
+          }
+        })
       })
 
       this.sAlkeet = aAlkeet.toString()
@@ -100,13 +100,28 @@ export default {
       this.sAlkeisjatko = aAlkeisjatko.toString()
       this.sJatko = aJatko.toString()
 
-    })
-  },
-  methods: {
+    },
+    emptyAttendanceList: function() {
+      this.alkeet.length = 0
+      this.alkeetOma.length = 0
+      this.alkeisjatko.length = 0
+      this.jatko.length = 0
+      this.sAlkeet = ''
+      this.sAlkeetOma = ''
+      this.sAlkeisjatko = ''
+      this.sJatko = ''
+      this.createAttendanceList()
+    },
     print: function() {
       window.print()
     }
-  }
+  },
+  mounted: function() {
+    this.createAttendanceList()
+    watch(this.members, () => {
+      this.emptyAttendanceList()
+    })
+  },
 }
 
 </script>
