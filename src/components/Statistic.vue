@@ -114,10 +114,7 @@
 <script>
 
 import Chart from 'chart.js'
-// import BarPairBalance from '../utilities/BarPairBalance.js'
-// import Pie from '../utilities/Pie.js'
 import StatisticGeneral from './StatisticGeneral.vue'
-// import BarAllCourses from '../utilities/BarAllCourses.js'
 import chartDataBarPairBalance from '../utilities/chartDataBarPairBalance.js'
 import chartDataBarAll from '../utilities/chartDataBarAll.js'
 import chartDataPie from '../utilities/chartDataPie.js'
@@ -237,8 +234,13 @@ export default {
             courseId.paid++
           }
 
-          courseId.hometown[member.hometown.toLowerCase()]++
-          all.hometown[member.hometown.toLowerCase()]++
+          if (['helsinki', 'vantaa', 'espoo'].indexOf(member.hometown.toLowerCase()) + 1) {
+            courseId.hometown[member.hometown.toLowerCase()]++
+            all.hometown[member.hometown.toLowerCase()]++
+          } else {
+            courseId.hometown.other++
+            all.hometown.other++
+          }
 
           if (member.membership[0].club && member.membership[0].student) {
             courseId.membership.studentAndClub++
