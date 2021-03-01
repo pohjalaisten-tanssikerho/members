@@ -26,7 +26,7 @@
             <ul>
               <li v-for="course in member.courses" :key="course">
                 <span v-if="course.courseId == 'kannatus'">kannatusjäsen</span>
-                <span v-else>{{ course.courseId }}, {{ course.role }}</span>
+                <span v-else>{{ course.courseId }}, {{ translateRole(course.role) }}</span>
               </li>
               <li v-if="member.support">kannatusjäsen</li>
             </ul>
@@ -35,7 +35,7 @@
             <h6>Alennusoikeus</h6>
             <ul>
               <li v-if="member.membership[0].student">opiskelija</li>
-              <!-- <li v&#45;if="member.membership[0].hyy.length > 0">{{ member.membership[0].hyy }}</li> -->
+              <li v-if="member.membership[0].hyy.length > 0">{{ member.membership[0].hyy }}</li>
               <li v-if="member.membership[0].club">osakuntalainen</li>
             </ul>
           </section>
@@ -69,6 +69,20 @@ export default {
         allMailsArray.push(member.email)
       })
       this.allmails = allMailsArray.toString()
+    },
+    translateRole: function(role) {
+      let translation = ''
+      switch (role) {
+        case 'leader': {
+          translation = 'viejä'
+          break
+        }
+        case 'follower': {
+          translation = 'seuraaja'
+          break
+        }
+      }
+      return translation
     }
   },
   mounted: function() {
