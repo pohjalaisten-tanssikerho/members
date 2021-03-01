@@ -114,11 +114,14 @@
 <script>
 
 import Chart from 'chart.js'
-import BarPairBalance from '../utilities/BarPairBalance.js'
-import Pie from '../utilities/Pie.js'
+// import BarPairBalance from '../utilities/BarPairBalance.js'
+// import Pie from '../utilities/Pie.js'
 import StatisticGeneral from './StatisticGeneral.vue'
-import BarAllCourses from '../utilities/BarAllCourses.js'
-import { onMounted, computed, watch } from 'vue'
+// import BarAllCourses from '../utilities/BarAllCourses.js'
+import chartDataBarPairBalance from '../utilities/chartDataBarPairBalance.js'
+import chartDataBarAll from '../utilities/chartDataBarAll.js'
+import chartDataPie from '../utilities/chartDataPie.js'
+import { onMounted, onUnmounted, computed, watch } from 'vue'
 
 export default {
   components: { StatisticGeneral },
@@ -181,31 +184,7 @@ export default {
       ]
     }
 
-    function createCourseStatistic() {
-      return {
-        total: 0,
-        paid: 0,
-        totalPaid: 0,
-        totalAmount: 0,
-        follower: 0,
-        leader: 0,
-        hometown: {
-          helsinki: 0,
-          espoo: 0,
-          vantaa: 0,
-          muu: 0,
-        },
-        membership: {
-          student: 0,
-          club: 0,
-          studentAndClub: 0,
-          other: 0,
-        }
-      }
-    }
-
     function getPrice(member, course, priceTable) {
-
       let memberDiscount = null
       if (member.club && member.student) memberDiscount = 'osakuntalainen'
       else if (member.student) memberDiscount = 'opiskelija'
@@ -220,6 +199,28 @@ export default {
     }
 
       const statistic = computed(() => {
+        function createCourseStatistic() {
+          return {
+            total: 0,
+            paid: 0,
+            totalPaid: 0,
+            totalAmount: 0,
+            follower: 0,
+            leader: 0,
+            hometown: {
+              helsinki: 0,
+              espoo: 0,
+              vantaa: 0,
+              other: 0,
+            },
+            membership: {
+              student: 0,
+              club: 0,
+              studentAndClub: 0,
+              other: 0,
+            }
+          }
+        }
 
         const all = createCourseStatistic()
         const alkeet = createCourseStatistic()
@@ -299,74 +300,108 @@ export default {
 
     function createChart(chartId, chartData) {
       const ctx = document.getElementById(chartId);
-      new Chart(ctx, {
+      return new Chart(ctx, {
         type: chartData.type,
         data: chartData.data,
         options: chartData.options,
-      });
+      })
     }
 
-    const createPairBalance = function(memberData, target) {
-      const memberPairBalanceLabels = ['viejä', 'seuraaja']
-      const memberBar = new BarPairBalance(memberData.leader, memberData.follower, memberPairBalanceLabels)
-      createChart(target, memberBar.data)
-    }
-    const createMemberPie = function(memberData, target) {
-      const memberStatusLabels = ['opiskelija' , 'osakuntalainen', 'opiskelija ja osakuntalainen', 'muu']
-      const { student, club, studentAndClub, other } = memberData.membership
-      const memberPie = new Pie(student, club, studentAndClub, other, memberStatusLabels)
-      createChart(target, memberPie.data)
-    }
-    const createHometownPie = function(memberData, target) {
-      const memberHometownLabels = ['Helsinki                   ', 'Espoo              ', 'Vantaa                        ', 'muu']
-      const { helsinki, espoo, vantaa, other } = memberData.hometown
-      const hometownPie = new Pie(helsinki, espoo, vantaa, other, memberHometownLabels)
-      createChart(target, hometownPie.data)
+    const getPairBalanceId = (courseId) => courseId + '-pair-balance'
+    const getMemberId = (courseId) => courseId + '-member-status'
+    const getHometownId = (courseId) => courseId + '-hometown'
+
+    const courseIds = {
+      all: 'all',
+      alkeet: 'alkeet',
+      alkeetOma: 'alkeetOma',
+      alkeisjatko: 'alkeisjatko',
+      jatko: 'jatko',
     }
 
-    const barAllIncome = new BarAllCourses(
-      (statistic.value.alkeet.totalAmount), 
-      (statistic.value.alkeetOma.totalAmount), 
-      (statistic.value.alkeisjatko.totalAmount), 
-      (statistic.value.jatko.totalAmount), 
-      'all-income')
+    function createAllCharts() {
+      const charts = new Array()
 
-    const barAllCourses = new BarAllCourses(
-      (statistic.value.alkeet.leader + statistic.value.alkeet.follower), 
-      (statistic.value.alkeetOma.leader + statistic.value.alkeetOma.follower),
-      (statistic.value.alkeisjatko.leader + statistic.value.alkeisjatko.follower),
-      (statistic.value.jatko.leader + statistic.value.jatko.follower),
-      'all-courses')
+      Object.keys(courseIds).forEach( key => {
+        charts.push(
+          createChart(
+            getPairBalanceId(courseIds[key]),
+            chartDataBarPairBalance(
+              statistic.value[key].leader,
+              statistic.value[key].follower,
+              '',
+            )
+          )
+        )
+        charts.push(
+          createChart(
+            getMemberId(courseIds[key]),
+            chartDataPie(
+              statistic.value[key].membership.student,
+              statistic.value[key].membership.club,
+              statistic.value[key].membership.studentAndClub,
+              statistic.value[key].membership.other,
+              ['opiskelija', 'osakuntalainen', 'opiskelija ja osakuntalainen', 'muu'],
+            )
+          )
+        )
+        charts.push(
+          createChart(
+            getHometownId(courseIds[key]),
+            chartDataPie(
+              statistic.value[key].hometown.helsinki,
+              statistic.value[key].hometown.espoo,
+              statistic.value[key].hometown.vantaa,
+              statistic.value[key].hometown.other,
+              ['Helsinki', 'Espoo', 'Vantaa', 'muu']
+            )
+          )
+        )
+      })
+      charts.push(
+        createChart(
+          'all-courses',
+          chartDataBarAll(
+            statistic.value.alkeet.total,
+            statistic.value.alkeetOma.total,
+            statistic.value.alkeisjatko.total,
+            statistic.value.jatko.total,
+            'kurssilaisia',
+          )
+        )
+      )
+      charts.push(
+        createChart(
+          'all-income',
+          chartDataBarAll(
+            statistic.value.alkeet.totalAmount,
+            statistic.value.alkeetOma.totalAmount,
+            statistic.value.alkeisjatko.totalAmount,
+            statistic.value.jatko.totalAmount,
+            'tuotto',
+          )
+        )
+      )
 
-    function drawAll() {
-        createPairBalance(statistic.value.alkeet, 'alkeet-pair-balance')
-        createPairBalance(statistic.value.alkeetOma, 'alkeetOma-pair-balance')
-        createPairBalance(statistic.value.alkeisjatko, 'alkeisjatko-pair-balance')
-        createPairBalance(statistic.value.jatko, 'jatko-pair-balance')
-        createPairBalance(statistic.value.all, 'all-pair-balance')
-
-        createMemberPie(statistic.value.alkeet, 'alkeet-member-status')
-        createMemberPie(statistic.value.alkeetOma, 'alkeetOma-member-status')
-        createMemberPie(statistic.value.alkeisjatko, 'alkeisjatko-member-status')
-        createMemberPie(statistic.value.jatko, 'jatko-member-status')
-        createMemberPie(statistic.value.all, 'all-member-status')
-
-        createHometownPie(statistic.value.alkeet, 'alkeet-hometown')
-        createHometownPie(statistic.value.alkeetOma, 'alkeetOma-hometown')
-        createHometownPie(statistic.value.alkeisjatko, 'alkeisjatko-hometown')
-        createHometownPie(statistic.value.jatko, 'jatko-hometown')
-        createHometownPie(statistic.value.all, 'all-hometown')
-
-        barAllCourses.draw()
-        barAllIncome.draw()
+      return charts
     }
+
+    let allCharts = ''
 
     onMounted(() => {
+      allCharts = createAllCharts()
       watch(statistic, () => {
-        drawAll()
+        allCharts.forEach( chart => 
+          {
+            chart.destroy()
+            allCharts = createAllCharts()
+          })
       })
-      drawAll()
-    }) 
+      onUnmounted(() => {
+        allCharts.forEach( chart => chart.destroy())
+      })
+
+    })
 
     return { 
       statistic,

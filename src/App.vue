@@ -95,8 +95,6 @@ export default {
       password: '',
       seasons: [ 
         { season: '2021k', selected: true, },
-        { season: '2020s', selected: false, },
-        { season: '2020k', selected: false, }
       ],
       unsubscribe: function() { return undefined },
     }  
