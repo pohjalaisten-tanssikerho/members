@@ -1,7 +1,6 @@
-export function chartDataBarPairBalance(leaderAmount, followerAmount, labelsInput) {
+export function chartDataBarPairBalance(leaderAmount, followerAmount) {
   const leaders = leaderAmount
   const followers = followerAmount
-  const labels = (labels === undefined) ? ' ' : labelsInput
   return {
     type: 'bar',
     data: {

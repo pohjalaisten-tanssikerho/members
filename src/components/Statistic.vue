@@ -331,7 +331,6 @@ export default {
             chartDataBarPairBalance(
               statistic.value[key].leader,
               statistic.value[key].follower,
-              '',
             )
           )
         )
