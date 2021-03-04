@@ -1,6 +1,6 @@
 import { render } from '@testing-library/vue'
 import '@testing-library/jest-dom'
-import HelloWorld from '@/components/StatisticGeneral.vue'
+import StatisticGeneral from '@/components/StatisticGeneral.vue'
 
 describe('StatisticGeneral.vue', () => {
   it('renders statistic correctly', () => {
@@ -11,7 +11,7 @@ describe('StatisticGeneral.vue', () => {
       totalPaid: 1780,
       totalAmount: 2200
     }
-    const { getByText } = render(HelloWorld, {
+    const { getByText } = render(StatisticGeneral, {
       props: { statistic }
     })
     expect(getByText('osallistujia: 25')).toBeInTheDocument()
